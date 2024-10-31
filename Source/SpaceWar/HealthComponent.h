@@ -46,8 +46,6 @@ protected:
 	UParticleSystem* DeathParticles;
 	UPROPERTY(EditAnywhere)
 	FVector DeathParticleScale = FVector(10, 10, 10);
-	UPROPERTY(EditAnywhere)
-	USceneComponent* DeathEffectPosition;
 
 public:
 	// Called every frame

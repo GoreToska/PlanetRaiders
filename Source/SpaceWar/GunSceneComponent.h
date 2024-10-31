@@ -7,6 +7,7 @@
 #include "GunSceneComponent.generated.h"
 
 
+class UGunSocket;
 class AProjectileBase;
 class UPlayerStats;
 
@@ -31,22 +32,19 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnChose OnEquipped;
 
+	UPROPERTY()
+	UPlayerStats* PlayerStats;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
-	UPlayerStats* PlayerStats;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectileBase> Projectile;
-
+	UPROPERTY(EditAnywhere)
+	UGunSocket* GunSocket01;
 	UPROPERTY(EditAnywhere)
 	float FireSpeedPerSec = 100;
 	UPROPERTY(EditAnywhere)
 	float Distance = 1000;
-
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
 };
