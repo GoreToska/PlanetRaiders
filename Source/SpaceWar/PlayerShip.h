@@ -8,7 +8,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerShip.generated.h"
 
-class UGunComponent;
+class UPlayerInventory;
 class UPlayerStats;
 class IStatsContainerRead;
 class UCameraShake;
@@ -40,7 +40,9 @@ protected:
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* CameraComponent;
-
+	UPROPERTY(EditAnywhere)
+	UPlayerInventory* PlayerInventory;
+	
 	UPROPERTY(EditAnywhere)
 	class UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)

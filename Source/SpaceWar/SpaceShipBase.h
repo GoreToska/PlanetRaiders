@@ -6,7 +6,6 @@
 #include "GameFramework/Pawn.h"
 #include "SpaceShipBase.generated.h"
 
-class UGunComponent;
 class UGunSceneComponent;
 class UDodgeComponent;
 class UPlayerStats;
@@ -39,8 +38,13 @@ protected:
 	TSubclassOf<AProjectileBase> BlasterProjectile;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* FlareParticles;
+
+	//UPROPERTY(EditAnywhere)
+	//USceneComponent* BlasterFireSocket;
+
 	UPROPERTY(EditAnywhere)
-	USceneComponent* BlasterFireSocket;
+	UGunSceneComponent* BlasterGun;
+
 	UPROPERTY()
 	FTimerHandle BlasterShootingTimerHandle;
 	UPROPERTY()

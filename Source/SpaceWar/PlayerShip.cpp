@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Gun.h"
 #include "HealthComponent.h"
+#include "PlayerInventory.h"
 #include "PlayerStats.h"
 #include "ProjectileBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -27,6 +28,7 @@ APlayerShip::APlayerShip()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
+	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Player Inventory"));
 
 	SpringArmComponent->bEnableCameraRotationLag;
 	SpringArmComponent->CameraRotationLagSpeed = 7.f;
@@ -87,13 +89,7 @@ void APlayerShip::AddLeftRotation(const FInputActionValue& Value)
 
 void APlayerShip::PerformShooting(const FInputActionValue& Value)
 {
-	if (GetWorld()->GetTimerManager().IsTimerActive(BlasterShootingTimerHandle))
-		return;
-
-	GetWorld()->GetTimerManager().SetTimer(BlasterShootingTimerHandle, this,
-	                                       &APlayerShip::FireBlasterShot,
-	                                       60 / FireSpeedPerSec,
-	                                       false);
+	FireBlasterShot();
 }
 
 void APlayerShip::SwitchAim(const FInputActionValue& Value)
@@ -277,7 +273,7 @@ FVector2D APlayerShip::GetPlayerAimDirection()
 {
 	FVector2D ScreenLocation;
 	FHitResult Hit;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(OUT Hit, BlasterFireSocket->GetComponentLocation(),
+	/*bool bHit = GetWorld()->LineTraceSingleByChannel(OUT Hit, BlasterFireSocket->GetComponentLocation(),
 	                                                 BlasterFireSocket->GetComponentLocation() + BlasterFireSocket->
 	                                                 GetForwardVector() *
 	                                                 AimDistance,
@@ -292,12 +288,7 @@ FVector2D APlayerShip::GetPlayerAimDirection()
 	{
 		PlayerController->ProjectWorldLocationToScreen(
 			BlasterFireSocket->GetComponentLocation() + BlasterFireSocket->GetForwardVector() * AimDistance, ScreenLocation);
-	}
-
-
-	//DrawDebugLine(GetWorld(), Blaster->GetActorLocation(),
-	//  Blaster->GetActorLocation() + Blaster->GetActorForwardVector() * 100, FColor::Red);
-
+	}*/
 
 	return ScreenLocation;
 }

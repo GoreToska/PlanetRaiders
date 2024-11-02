@@ -3,7 +3,6 @@
 
 #include "GunSceneComponent.h"
 
-#include "GunSocket.h"
 #include "ProjectileBase.h"
 #include "PlayerStats.h"
 
@@ -12,9 +11,7 @@ UGunSceneComponent::UGunSceneComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	GunSocket01 = CreateDefaultSubobject<UGunSocket>(TEXT("Gun Socket"));
+	PrimaryComponentTick.bCanEverTick = false;
 	// ...
 }
 
@@ -24,8 +21,6 @@ void UGunSceneComponent::FireShot()
 	FRotator Rotation = GetComponentRotation();
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	UE_LOG(LogTemp, Display, TEXT("Shot!"));
 
 	if (AProjectileBase* ProjectileBase = GetWorld()->SpawnActor<AProjectileBase>(
 		Projectile, Location, Rotation, SpawnInfo); this && ProjectileBase)
@@ -37,17 +32,53 @@ void UGunSceneComponent::FireShot()
 
 void UGunSceneComponent::PerformShot()
 {
-	if (GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle))
-		return;
+	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
 
-	UE_LOG(LogTemp, Display, TEXT("Shot!"));
-	GetWorld()->GetTimerManager().SetTimer(ShootingTimerHandle, this, &UGunSceneComponent::FireShot,
-	                                       60 / FireSpeedPerSec,
-	                                       false);
+	if (CurrentAmmo <= 0 || !IsCooldown)
+	{
+		GetWorld()->GetTimerManager()
+		          .SetTimer(ShootingTimerHandle,
+		                    this,
+		                    &UGunSceneComponent::FireShot,
+		                    60 / FireSpeedPerSec,
+		                    false);
+	}
+
+	bool IsLoading = GetWorld()->GetTimerManager().IsTimerActive(LoadingTimerHandle);
+	if (!IsLoading)
+	{
+		GetWorld()->GetTimerManager()
+		          .SetTimer(LoadingTimerHandle,
+		                    this,
+		                    &UGunSceneComponent::LoadAmmo,
+		                    TimeToLoadAmmo,
+		                    true);
+	}
 }
 
 void UGunSceneComponent::Equip()
 {
+	OnEquipped.Broadcast();
+}
+
+void UGunSceneComponent::LoadAmmo()
+{
+	if (CurrentAmmo < MaxAmmo)
+	{
+		++CurrentAmmo;
+		OnBulletCountChanged.Broadcast(CurrentAmmo);
+		UE_LOG(LogTemp, Warning, TEXT("%d"), CurrentAmmo);
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(LoadingTimerHandle);
+	}
+}
+
+void UGunSceneComponent::SpendAmmo()
+{
+	--CurrentAmmo;
+	OnBulletCountChanged.Broadcast(CurrentAmmo);
 }
 
 
@@ -56,5 +87,6 @@ void UGunSceneComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	PlayerStats = GetOwner()->GetComponentByClass<UPlayerStats>();
+	CurrentAmmo = MaxAmmo;
 }

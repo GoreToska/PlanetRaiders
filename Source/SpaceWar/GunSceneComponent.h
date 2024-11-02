@@ -23,17 +23,29 @@ public:
 	void FireShot();
 	void PerformShot();
 	void Equip();
-
-	UPROPERTY()
-	FTimerHandle ShootingTimerHandle;
+	void LoadAmmo();
+	void SpendAmmo();
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChose);
 
-	UPROPERTY(BlueprintAssignable)
-	FOnChose OnEquipped;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBulletStatus, int, NewAmmoValue);
 
 	UPROPERTY()
 	UPlayerStats* PlayerStats;
+	UPROPERTY()
+	FTimerHandle ShootingTimerHandle;
+	UPROPERTY()
+	FTimerHandle LoadingTimerHandle;
+	UPROPERTY(EditAnywhere)
+	int MaxAmmo = 40;
+	UPROPERTY(EditAnywhere)
+	float TimeToLoadAmmo = 0.5;
+	int CurrentAmmo;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnChose OnEquipped;
+	UPROPERTY(BlueprintAssignable)
+	FBulletStatus OnBulletCountChanged;
 
 protected:
 	// Called when the game starts
@@ -41,8 +53,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectileBase> Projectile;
-	UPROPERTY(EditAnywhere)
-	UGunSocket* GunSocket01;
 	UPROPERTY(EditAnywhere)
 	float FireSpeedPerSec = 100;
 	UPROPERTY(EditAnywhere)
