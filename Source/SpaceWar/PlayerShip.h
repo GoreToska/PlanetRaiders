@@ -120,8 +120,10 @@ public:
 	float GetCurrentSpeed();
 
 	UFUNCTION(BlueprintCallable)
-	FVector2D GetPlayerAimDirection();
-
+	FVector2D GetPlayerAimDirection01();
+	UFUNCTION(BlueprintCallable)
+	FVector2D GetPlayerAimDirection02();
+	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FUsedFlare);
 
 	UPROPERTY(BlueprintAssignable)

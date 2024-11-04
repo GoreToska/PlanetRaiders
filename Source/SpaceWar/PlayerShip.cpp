@@ -9,11 +9,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Gun.h"
+#include "GunSceneComponent.h"
 #include "HealthComponent.h"
 #include "PlayerInventory.h"
 #include "PlayerStats.h"
 #include "ProjectileBase.h"
+#include "RegeneratableHealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -34,6 +35,9 @@ APlayerShip::APlayerShip()
 	SpringArmComponent->CameraRotationLagSpeed = 7.f;
 	SpringArmComponent->bEnableCameraLag;
 	SpringArmComponent->CameraLagSpeed = 7.f;
+
+	BlasterGun = CreateDefaultSubobject<UGunSceneComponent>(TEXT("BlasterGun"));
+	BlasterGun->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned
@@ -269,28 +273,14 @@ float APlayerShip::GetCurrentSpeed()
 	return CurrentSpeed;
 }
 
-FVector2D APlayerShip::GetPlayerAimDirection()
+FVector2D APlayerShip::GetPlayerAimDirection01()
 {
-	FVector2D ScreenLocation;
-	FHitResult Hit;
-	/*bool bHit = GetWorld()->LineTraceSingleByChannel(OUT Hit, BlasterFireSocket->GetComponentLocation(),
-	                                                 BlasterFireSocket->GetComponentLocation() + BlasterFireSocket->
-	                                                 GetForwardVector() *
-	                                                 AimDistance,
-	                                                 ECollisionChannel::ECC_Visibility);
+	return BlasterGun->GetFirstCrosshairPosition();
+}
 
-	if (bHit)
-	{
-		PlayerController->ProjectWorldLocationToScreen(
-			Hit.Location, ScreenLocation);
-	}
-	else
-	{
-		PlayerController->ProjectWorldLocationToScreen(
-			BlasterFireSocket->GetComponentLocation() + BlasterFireSocket->GetForwardVector() * AimDistance, ScreenLocation);
-	}*/
-
-	return ScreenLocation;
+FVector2D APlayerShip::GetPlayerAimDirection02()
+{
+	return BlasterGun->GetSecondCrosshairPosition();
 }
 
 void APlayerShip::ClampCurrentSpeed()

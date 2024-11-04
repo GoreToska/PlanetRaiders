@@ -5,6 +5,7 @@
 
 #include "ProjectileBase.h"
 #include "PlayerStats.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UGunSceneComponent::UGunSceneComponent()
@@ -22,6 +23,11 @@ void UGunSceneComponent::FireShot()
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+	Rotation.Pitch += FMath::RandRange(-Spread.X, Spread.X);
+	Rotation.Yaw += FMath::RandRange(-Spread.Y, Spread.Y);
+
+	SpendAmmo();
+
 	if (AProjectileBase* ProjectileBase = GetWorld()->SpawnActor<AProjectileBase>(
 		Projectile, Location, Rotation, SpawnInfo); this && ProjectileBase)
 	{
@@ -32,9 +38,11 @@ void UGunSceneComponent::FireShot()
 
 void UGunSceneComponent::PerformShot()
 {
-	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
+	if (CurrentAmmo <= 0)
+		return;
 
-	if (CurrentAmmo <= 0 || !IsCooldown)
+	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
+	if (!IsCooldown)
 	{
 		GetWorld()->GetTimerManager()
 		          .SetTimer(ShootingTimerHandle,
@@ -81,6 +89,25 @@ void UGunSceneComponent::SpendAmmo()
 	OnBulletCountChanged.Broadcast(CurrentAmmo);
 }
 
+FVector2D UGunSceneComponent::GetFirstCrosshairPosition() const
+{
+	FVector2D ScreenLocation;
+	FVector CrosshairPosition = GetComponentLocation() + GetForwardVector() * Distance * 10;
+	UGameplayStatics::GetPlayerController(this, 0)->ProjectWorldLocationToScreen(
+		CrosshairPosition, ScreenLocation);
+
+	return ScreenLocation;
+}
+
+FVector2D UGunSceneComponent::GetSecondCrosshairPosition() const
+{
+	FVector2D ScreenLocation;
+	FVector CrosshairPosition = GetComponentLocation() + GetForwardVector() * Distance;
+	UGameplayStatics::GetPlayerController(this, 0)->ProjectWorldLocationToScreen(
+		CrosshairPosition, ScreenLocation);
+
+	return ScreenLocation;
+}
 
 // Called when the game starts
 void UGunSceneComponent::BeginPlay()

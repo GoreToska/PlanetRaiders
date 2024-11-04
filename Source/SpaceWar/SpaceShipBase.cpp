@@ -5,8 +5,8 @@
 
 #include "DodgeComponent.h"
 #include "GunSceneComponent.h"
-#include "HealthComponent.h"
 #include "PlayerStats.h"
+#include "RegeneratableHealthComponent.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -16,22 +16,16 @@ ASpaceShipBase::ASpaceShipBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
-	BoxComponent->SetupAttachment(RootComponent);
-
+	SetRootComponent(BoxComponent);
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	StaticMeshComponent->SetupAttachment(BoxComponent);
+	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	BoxComponent->SetSimulatePhysics(false);
 	BoxComponent->SetEnableGravity(false);
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
+	HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
 	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Player Stats"));
 	DodgeComponent = CreateDefaultSubobject<UDodgeComponent>(TEXT("Dodge Component"));
-
-	BlasterGun = CreateDefaultSubobject<UGunSceneComponent>(TEXT("Blaster Gun"));
-	BlasterGun->SetupAttachment(StaticMeshComponent);
-	//BlasterFireSocket = CreateDefaultSubobject<USceneComponent>(TEXT("Blaster Fire Socket"));
-	//BlasterFireSocket->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned

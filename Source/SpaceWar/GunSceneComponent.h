@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+
 #include "GunSceneComponent.generated.h"
 
 
@@ -25,6 +26,8 @@ public:
 	void Equip();
 	void LoadAmmo();
 	void SpendAmmo();
+	FVector2D GetFirstCrosshairPosition() const;
+	FVector2D GetSecondCrosshairPosition() const;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChose);
 
@@ -37,10 +40,14 @@ public:
 	UPROPERTY()
 	FTimerHandle LoadingTimerHandle;
 	UPROPERTY(EditAnywhere)
+	FVector2D Spread = FVector2D(1, 1);
+	UPROPERTY(EditAnywhere)
 	int MaxAmmo = 40;
 	UPROPERTY(EditAnywhere)
 	float TimeToLoadAmmo = 0.5;
 	int CurrentAmmo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* CrosshairTexture;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnChose OnEquipped;

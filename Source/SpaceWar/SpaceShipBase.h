@@ -6,11 +6,11 @@
 #include "GameFramework/Pawn.h"
 #include "SpaceShipBase.generated.h"
 
+class URegeneratableHealthComponent;
 class UGunSceneComponent;
 class UDodgeComponent;
 class UPlayerStats;
 class AStatsManager;
-class UHealthComponent;
 class UBoxComponent;
 class AProjectileBase;
 
@@ -24,12 +24,14 @@ public:
 	ASpaceShipBase();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UHealthComponent* HealthComponent;
+	URegeneratableHealthComponent* HealthComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPlayerStats* PlayerStats;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UDodgeComponent* DodgeComponent;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UGunSceneComponent* BlasterGun;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,9 +43,6 @@ protected:
 
 	//UPROPERTY(EditAnywhere)
 	//USceneComponent* BlasterFireSocket;
-
-	UPROPERTY(EditAnywhere)
-	UGunSceneComponent* BlasterGun;
 
 	UPROPERTY()
 	FTimerHandle BlasterShootingTimerHandle;
