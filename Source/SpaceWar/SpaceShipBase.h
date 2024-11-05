@@ -23,6 +23,8 @@ public:
 	// Sets default values for this pawn's properties
 	ASpaceShipBase();
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChose, UGunSceneComponent*, NewGun, UGunSceneComponent*, PreviouseGun);
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	URegeneratableHealthComponent* HealthComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -31,7 +33,14 @@ public:
 	UDodgeComponent* DodgeComponent;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UGunSceneComponent* BlasterGun;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UGunSceneComponent* RocketGun;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UGunSceneComponent* CurrentGun;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnChose OnEquipped;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -88,6 +97,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UStaticMeshComponent& GetMesh();
-	void SetGun();
-	void FireBlasterShot();
+	void SetBlasterGun();
+	void SetRocketGun();
+	void FireCurrentGunShot();
 };

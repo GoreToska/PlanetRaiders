@@ -23,14 +23,11 @@ public:
 
 	void FireShot();
 	void PerformShot();
-	void Equip();
 	void LoadAmmo();
 	void SpendAmmo();
 	FVector2D GetFirstCrosshairPosition() const;
 	FVector2D GetSecondCrosshairPosition() const;
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChose);
-
+	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBulletStatus, int, NewAmmoValue);
 
 	UPROPERTY()
@@ -48,15 +45,17 @@ public:
 	int CurrentAmmo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* CrosshairTexture;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnChose OnEquipped;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* UI_Image;
+	
 	UPROPERTY(BlueprintAssignable)
 	FBulletStatus OnBulletCountChanged;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	void OnShotFired();
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectileBase> Projectile;

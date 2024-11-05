@@ -31,13 +31,15 @@ APlayerShip::APlayerShip()
 
 	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Player Inventory"));
 
-	SpringArmComponent->bEnableCameraRotationLag;
+	SpringArmComponent->bEnableCameraRotationLag = true;
 	SpringArmComponent->CameraRotationLagSpeed = 7.f;
-	SpringArmComponent->bEnableCameraLag;
+	SpringArmComponent->bEnableCameraLag = true;
 	SpringArmComponent->CameraLagSpeed = 7.f;
 
 	BlasterGun = CreateDefaultSubobject<UGunSceneComponent>(TEXT("BlasterGun"));
 	BlasterGun->SetupAttachment(StaticMeshComponent);
+	RocketGun = CreateDefaultSubobject<UGunSceneComponent>(TEXT("RocketGun"));
+	RocketGun->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned
@@ -59,8 +61,7 @@ void APlayerShip::BeginPlay()
 
 	HealthComponent->OnGetDamage.AddDynamic(this, &APlayerShip::PerformDamageCameraShake);
 
-	//CurrentGunIndex = 0;
-	//SetGun();
+	SetBlasterGun();
 }
 
 void APlayerShip::AddSpeed(const FInputActionValue& Value)
@@ -93,7 +94,7 @@ void APlayerShip::AddLeftRotation(const FInputActionValue& Value)
 
 void APlayerShip::PerformShooting(const FInputActionValue& Value)
 {
-	FireBlasterShot();
+	FireCurrentGunShot();
 }
 
 void APlayerShip::SwitchAim(const FInputActionValue& Value)
@@ -131,18 +132,14 @@ void APlayerShip::Dodge(const FInputActionValue& Value)
 	DodgeComponent->PerformDodge(DodgeVector);
 }
 
-void APlayerShip::SwitchGun(const FInputActionValue& Value)
+void APlayerShip::FirstWeapon(const FInputActionValue& Value)
 {
-	if (Value.Get<float>() > 0)
-	{
-		//++CurrentGunIndex;
-	}
-	else
-	{
-		//--CurrentGunIndex;
-	}
+	SetBlasterGun();
+}
 
-	SetGun();
+void APlayerShip::SecondWeapon(const FInputActionValue& Value)
+{
+	SetRocketGun();
 }
 
 void APlayerShip::PerformTurn(float DeltaTime)
@@ -254,6 +251,10 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerShip::SwitchAim);
 		EnhancedInputComponent->BindAction(FlareAction, ETriggerEvent::Triggered, this, &APlayerShip::UseFlare);
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &APlayerShip::Dodge);
+		EnhancedInputComponent->BindAction(FirstWeaponAction, ETriggerEvent::Triggered, this,
+		                                   &APlayerShip::FirstWeapon);
+		EnhancedInputComponent->BindAction(SecondWeaponAction, ETriggerEvent::Triggered, this,
+		                                   &APlayerShip::SecondWeapon);
 	}
 }
 

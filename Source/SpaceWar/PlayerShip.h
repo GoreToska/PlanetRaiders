@@ -63,7 +63,11 @@ protected:
 	UInputAction* FlareAction;
 	UPROPERTY(EditAnywhere)
 	UInputAction* DodgeAction;
-
+	UPROPERTY(EditAnywhere)
+	UInputAction* FirstWeaponAction;
+	UPROPERTY(EditAnywhere)
+	UInputAction* SecondWeaponAction;
+	
 	void AddSpeed(const FInputActionValue& Value);
 	void DecreaseSpeed(const FInputActionValue& Value);
 	void Turn(const FInputActionValue& Value);
@@ -73,7 +77,8 @@ protected:
 	void SwitchAim(const FInputActionValue& Value);
 	void UseFlare(const FInputActionValue& Value);
 	void Dodge(const FInputActionValue& Value);
-	void SwitchGun(const FInputActionValue& Value);
+	void FirstWeapon(const FInputActionValue& Value);
+	void SecondWeapon(const FInputActionValue& Value);
 
 	void PerformTurn(float DeltaTime);
 	void PerformMovementForward(float DeltaTime);

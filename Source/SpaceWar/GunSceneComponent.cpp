@@ -44,10 +44,11 @@ void UGunSceneComponent::PerformShot()
 	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
 	if (!IsCooldown)
 	{
+		FireShot();
 		GetWorld()->GetTimerManager()
 		          .SetTimer(ShootingTimerHandle,
 		                    this,
-		                    &UGunSceneComponent::FireShot,
+		                    &UGunSceneComponent::OnShotFired,
 		                    60 / FireSpeedPerSec,
 		                    false);
 	}
@@ -62,11 +63,6 @@ void UGunSceneComponent::PerformShot()
 		                    TimeToLoadAmmo,
 		                    true);
 	}
-}
-
-void UGunSceneComponent::Equip()
-{
-	OnEquipped.Broadcast();
 }
 
 void UGunSceneComponent::LoadAmmo()
@@ -116,4 +112,8 @@ void UGunSceneComponent::BeginPlay()
 
 	PlayerStats = GetOwner()->GetComponentByClass<UPlayerStats>();
 	CurrentAmmo = MaxAmmo;
+}
+
+void UGunSceneComponent::OnShotFired()
+{
 }

@@ -57,18 +57,25 @@ UStaticMeshComponent& ASpaceShipBase::GetMesh()
 	return *StaticMeshComponent;
 }
 
-void ASpaceShipBase::SetGun()
+void ASpaceShipBase::SetBlasterGun()
 {
-	/*if (CurrentGunIndex < 0)
-		CurrentGunIndex = Guns.Num() - 1;
-	if (CurrentGunIndex > Guns.Num() - 1)
-		CurrentGunIndex = 0;
+	if (CurrentGun == BlasterGun)
+		return;
 
-	CurrentGun = Guns[CurrentGunIndex];
-	CurrentGun->Equip();*/
+	OnEquipped.Broadcast(BlasterGun, CurrentGun);
+	CurrentGun = BlasterGun;
 }
 
-void ASpaceShipBase::FireBlasterShot()
+void ASpaceShipBase::SetRocketGun()
 {
-	BlasterGun->PerformShot();
+	if (CurrentGun == RocketGun)
+		return;
+
+	OnEquipped.Broadcast(RocketGun, CurrentGun);
+	CurrentGun = RocketGun;
+}
+
+void ASpaceShipBase::FireCurrentGunShot()
+{
+	CurrentGun->PerformShot();
 }
