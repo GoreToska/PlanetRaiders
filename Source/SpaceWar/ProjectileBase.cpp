@@ -12,7 +12,7 @@
 AProjectileBase::AProjectileBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 	BoxComponent->SetupAttachment(SceneComponent);
@@ -50,24 +50,6 @@ void AProjectileBase::BeginPlay()
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnBeginOverlap);
 }
 
-void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
-                            FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor == GetOwner())
-		return;
-
-	if (UHealthComponent* HealthComponent = OtherActor->GetComponentByClass<UHealthComponent>())
-	{
-		HealthComponent->GetDamage(Damage);
-	}
-
-
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
-	                                         HitEffectScale);
-
-	Destroy();
-}
-
 void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                      const FHitResult& SweepResult)
@@ -85,11 +67,6 @@ void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
 	                                         HitEffectScale);
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
 	Destroy();
-}
-
-// Called every frame
-void AProjectileBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }

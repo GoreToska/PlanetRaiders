@@ -31,6 +31,7 @@ void UGunSceneComponent::FireShot()
 	{
 		ProjectileBase->SetOwner(GetOwner());
 		ProjectileBase->SetProjectileDamageModifier(PlayerStats->DamageModifier);
+		PlayShotSound(ProjectileBase->GetRootComponent());
 	}
 }
 
@@ -46,10 +47,9 @@ void UGunSceneComponent::PerformShot()
 		//UGameplayStatics::SpawnSound2D(this, EmptySound);
 		return;
 	}
-	
+
 	FireShot();
 	SpendAmmo();
-	PlayShotSound();
 
 	GetWorld()->GetTimerManager()
 	          .SetTimer(ShootingTimerHandle,
@@ -62,7 +62,7 @@ void UGunSceneComponent::PerformShot()
 	bool IsLoading = GetWorld()->GetTimerManager().IsTimerActive(LoadingTimerHandle);
 	if (IsLoading)
 		return;
-	
+
 	GetWorld()->GetTimerManager()
 	          .SetTimer(LoadingTimerHandle,
 	                    this,
@@ -91,9 +91,9 @@ void UGunSceneComponent::SpendAmmo()
 	OnBulletCountChanged.Broadcast(CurrentAmmo);
 }
 
-void UGunSceneComponent::PlayShotSound()
+void UGunSceneComponent::PlayShotSound(USceneComponent* ActorRoot)
 {
-	UGameplayStatics::SpawnSoundAtLocation(this, ShotSound, GetComponentLocation());
+	UGameplayStatics::SpawnSoundAttached(ShotSound, ActorRoot);
 }
 
 FVector2D UGunSceneComponent::GetFirstCrosshairPosition() const

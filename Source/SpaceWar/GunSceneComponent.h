@@ -25,7 +25,7 @@ public:
 	void PerformShot();
 	void LoadAmmo();
 	void SpendAmmo();
-	void PlayShotSound();
+	void PlayShotSound(USceneComponent* ActorRoot);
 	FVector2D GetFirstCrosshairPosition() const;
 	FVector2D GetSecondCrosshairPosition() const;
 
@@ -52,7 +52,7 @@ public:
 	USoundBase* ShotSound;
 	UPROPERTY(EditAnywhere)
 	USoundBase* EmptySound;
-	
+
 	UPROPERTY(BlueprintAssignable)
 	FBulletStatus OnBulletCountChanged;
 
