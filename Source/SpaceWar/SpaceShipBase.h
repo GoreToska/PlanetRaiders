@@ -23,8 +23,9 @@ public:
 	// Sets default values for this pawn's properties
 	ASpaceShipBase();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChose, UGunSceneComponent*, NewGun, UGunSceneComponent*, PreviouseGun);
-	
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChose, UGunSceneComponent*, NewGun, UGunSceneComponent*,
+	                                             PreviouseGun);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	URegeneratableHealthComponent* HealthComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -38,6 +39,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UGunSceneComponent* CurrentGun;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* GunChangedSound;
+
 	UPROPERTY(BlueprintAssignable)
 	FOnChose OnEquipped;
 
@@ -49,9 +53,6 @@ protected:
 	TSubclassOf<AProjectileBase> BlasterProjectile;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* FlareParticles;
-
-	//UPROPERTY(EditAnywhere)
-	//USceneComponent* BlasterFireSocket;
 
 	UPROPERTY()
 	FTimerHandle BlasterShootingTimerHandle;

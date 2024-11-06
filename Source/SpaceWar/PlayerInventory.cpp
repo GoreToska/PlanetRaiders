@@ -5,13 +5,14 @@
 
 #include "ItemDataAsset.h"
 #include "SpaceShipBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UPlayerInventory::UPlayerInventory()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -30,20 +31,12 @@ void UPlayerInventory::BeginPlay()
 }
 
 
-// Called every frame
-void UPlayerInventory::TickComponent(float DeltaTime, ELevelTick TickType,
-                                     FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UPlayerInventory::AddItem(UItemDataAsset* Item)
 {
 	PlayerItems.Add(Item);
 	Item->PickUp(SpaceShip->PlayerStats);
 	OnItemAdded.Broadcast(Item);
+	UGameplayStatics::SpawnSound2D(this, ItemAddedSound);
 }
 
 void UPlayerInventory::RemoveItem(UItemDataAsset* Item)

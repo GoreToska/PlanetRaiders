@@ -8,6 +8,7 @@
 #include "PlayerStats.h"
 #include "RegeneratableHealthComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpaceShipBase::ASpaceShipBase()
@@ -64,6 +65,7 @@ void ASpaceShipBase::SetBlasterGun()
 
 	OnEquipped.Broadcast(BlasterGun, CurrentGun);
 	CurrentGun = BlasterGun;
+	UGameplayStatics::SpawnSound2D(this, GunChangedSound);
 }
 
 void ASpaceShipBase::SetRocketGun()
@@ -73,6 +75,7 @@ void ASpaceShipBase::SetRocketGun()
 
 	OnEquipped.Broadcast(RocketGun, CurrentGun);
 	CurrentGun = RocketGun;
+	UGameplayStatics::SpawnSound2D(this, GunChangedSound);
 }
 
 void ASpaceShipBase::FireCurrentGunShot()

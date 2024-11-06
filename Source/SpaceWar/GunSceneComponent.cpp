@@ -26,8 +26,6 @@ void UGunSceneComponent::FireShot()
 	Rotation.Pitch += FMath::RandRange(-Spread.X, Spread.X);
 	Rotation.Yaw += FMath::RandRange(-Spread.Y, Spread.Y);
 
-	SpendAmmo();
-
 	if (AProjectileBase* ProjectileBase = GetWorld()->SpawnActor<AProjectileBase>(
 		Projectile, Location, Rotation, SpawnInfo); this && ProjectileBase)
 	{
@@ -38,31 +36,39 @@ void UGunSceneComponent::FireShot()
 
 void UGunSceneComponent::PerformShot()
 {
-	if (CurrentAmmo <= 0)
+	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
+
+	if (IsCooldown)
 		return;
 
-	bool IsCooldown = GetWorld()->GetTimerManager().IsTimerActive(ShootingTimerHandle);
-	if (!IsCooldown)
+	if (CurrentAmmo <= 0)
 	{
-		FireShot();
-		GetWorld()->GetTimerManager()
-		          .SetTimer(ShootingTimerHandle,
-		                    this,
-		                    &UGunSceneComponent::OnShotFired,
-		                    60 / FireSpeedPerSec,
-		                    false);
+		//UGameplayStatics::SpawnSound2D(this, EmptySound);
+		return;
 	}
+	
+	FireShot();
+	SpendAmmo();
+	PlayShotSound();
+
+	GetWorld()->GetTimerManager()
+	          .SetTimer(ShootingTimerHandle,
+	                    this,
+	                    &UGunSceneComponent::OnShotFired,
+	                    60 / FireSpeedPerSec,
+	                    false);
+
 
 	bool IsLoading = GetWorld()->GetTimerManager().IsTimerActive(LoadingTimerHandle);
-	if (!IsLoading)
-	{
-		GetWorld()->GetTimerManager()
-		          .SetTimer(LoadingTimerHandle,
-		                    this,
-		                    &UGunSceneComponent::LoadAmmo,
-		                    TimeToLoadAmmo,
-		                    true);
-	}
+	if (IsLoading)
+		return;
+	
+	GetWorld()->GetTimerManager()
+	          .SetTimer(LoadingTimerHandle,
+	                    this,
+	                    &UGunSceneComponent::LoadAmmo,
+	                    TimeToLoadAmmo,
+	                    true);
 }
 
 void UGunSceneComponent::LoadAmmo()
@@ -83,6 +89,11 @@ void UGunSceneComponent::SpendAmmo()
 {
 	--CurrentAmmo;
 	OnBulletCountChanged.Broadcast(CurrentAmmo);
+}
+
+void UGunSceneComponent::PlayShotSound()
+{
+	UGameplayStatics::SpawnSoundAtLocation(this, ShotSound, GetComponentLocation());
 }
 
 FVector2D UGunSceneComponent::GetFirstCrosshairPosition() const

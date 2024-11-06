@@ -42,7 +42,9 @@ protected:
 	UCameraComponent* CameraComponent;
 	UPROPERTY(EditAnywhere)
 	UPlayerInventory* PlayerInventory;
-	
+	UPROPERTY(EditAnywhere)
+	USoundBase* AimSound;
+
 	UPROPERTY(EditAnywhere)
 	class UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)
@@ -67,7 +69,7 @@ protected:
 	UInputAction* FirstWeaponAction;
 	UPROPERTY(EditAnywhere)
 	UInputAction* SecondWeaponAction;
-	
+
 	void AddSpeed(const FInputActionValue& Value);
 	void DecreaseSpeed(const FInputActionValue& Value);
 	void Turn(const FInputActionValue& Value);
@@ -128,7 +130,7 @@ public:
 	FVector2D GetPlayerAimDirection01();
 	UFUNCTION(BlueprintCallable)
 	FVector2D GetPlayerAimDirection02();
-	
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FUsedFlare);
 
 	UPROPERTY(BlueprintAssignable)

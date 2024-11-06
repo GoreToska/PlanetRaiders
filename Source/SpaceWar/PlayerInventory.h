@@ -25,10 +25,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
-
+	UPROPERTY(EditAnywhere)
+	USoundBase* ItemAddedSound;
+	
 	void AddItem(UItemDataAsset* Item);
 	void RemoveItem(UItemDataAsset* Item);
 	void RemoveRandomItem();
@@ -40,7 +39,7 @@ public:
 	FItemsChanged OnItemAdded;
 	UPROPERTY(BlueprintReadWrite, BlueprintAssignable)
 	FItemsChanged OnItemRemoved;
-
+	
 	UFUNCTION(BlueprintCallable)
 	int ItemCount(const UItemDataAsset* Item);
 

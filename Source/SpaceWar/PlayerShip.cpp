@@ -109,6 +109,8 @@ void APlayerShip::SwitchAim(const FInputActionValue& Value)
 	{
 		CurrentCameraFOV = StandardFOV;
 	}
+
+	UGameplayStatics::SpawnSound2D(this, AimSound);
 }
 
 void APlayerShip::UseFlare(const FInputActionValue& Value)

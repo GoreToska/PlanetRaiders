@@ -25,9 +25,10 @@ public:
 	void PerformShot();
 	void LoadAmmo();
 	void SpendAmmo();
+	void PlayShotSound();
 	FVector2D GetFirstCrosshairPosition() const;
 	FVector2D GetSecondCrosshairPosition() const;
-	
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBulletStatus, int, NewAmmoValue);
 
 	UPROPERTY()
@@ -47,6 +48,10 @@ public:
 	UTexture2D* CrosshairTexture;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* UI_Image;
+	UPROPERTY(EditAnywhere)
+	USoundBase* ShotSound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* EmptySound;
 	
 	UPROPERTY(BlueprintAssignable)
 	FBulletStatus OnBulletCountChanged;
