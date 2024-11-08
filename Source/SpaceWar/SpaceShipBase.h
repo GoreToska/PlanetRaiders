@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "SpaceShipBase.generated.h"
 
+class USpaceShipMovementComponent;
 class URegeneratableHealthComponent;
 class UGunSceneComponent;
 class UDodgeComponent;
@@ -38,7 +39,9 @@ public:
 	UGunSceneComponent* RocketGun;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UGunSceneComponent* CurrentGun;
-
+	UPROPERTY(EditAnywhere)
+	USpaceShipMovementComponent* MovementComponent;
+	
 	UPROPERTY(EditAnywhere)
 	USoundBase* GunChangedSound;
 
@@ -63,28 +66,11 @@ protected:
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
-
-	UPROPERTY(EditAnywhere)
-	float MaxSpeed = 1500.f;
-	UPROPERTY(EditAnywhere)
-	float MinSpeed = 600.f;
-	UPROPERTY(EditAnywhere)
-	float RotationPower = 5.f;
-	UPROPERTY(EditAnywhere)
-	float TurnSpeed = 1.5f;
-	UPROPERTY(EditAnywhere)
-	float AimingTurnSpeed = 0.5f;
-	UPROPERTY(EditAnywhere)
-	float InterpolationSpeed = 10;
-	UPROPERTY(EditAnywhere)
-	float SpeedChangingMultiplier = 400;
-	UPROPERTY(EditAnywhere)
-	float FireSpeedPerSec = 600;
+	
 	UPROPERTY(EditAnywhere)
 	float FlareCooldown = 10;
 	UPROPERTY(EditAnywhere)
 	float CollideDamage = 100;
-	float CurrentSpeed;
 
 	UFUNCTION()
 	virtual void OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,

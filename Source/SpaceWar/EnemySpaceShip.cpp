@@ -13,7 +13,7 @@ AEnemySpaceShip::AEnemySpaceShip()
 	ProjectileMovementComponent->bSweepCollision = true;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->ProjectileGravityScale = 0;
-	ProjectileMovementComponent->MaxSpeed = MaxSpeed;
+	//ProjectileMovementComponent->MaxSpeed = MaxSpeed;
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//ProjectileMovementComponent->InitialSpeed = 1000;
 }

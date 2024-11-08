@@ -8,6 +8,8 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerShip.generated.h"
 
+class UInputMappingContext;
+class UInputAction;
 class UPlayerInventory;
 class UPlayerStats;
 class IStatsContainerRead;
@@ -46,17 +48,13 @@ protected:
 	USoundBase* AimSound;
 
 	UPROPERTY(EditAnywhere)
-	class UInputMappingContext* DefaultMappingContext;
+	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)
-	class UInputAction* AddSpeedAction;
-	UPROPERTY(EditAnywhere)
-	UInputAction* DecreaseSpeedAction;
+	UInputAction* AddSpeedAction;
 	UPROPERTY(EditAnywhere)
 	UInputAction* TurnAction;
 	UPROPERTY(EditAnywhere)
-	UInputAction* RotateRightAction;
-	UPROPERTY(EditAnywhere)
-	UInputAction* RotateLeftAction;
+	UInputAction* RotateAction;
 	UPROPERTY(EditAnywhere)
 	UInputAction* ShotAction;
 	UPROPERTY(EditAnywhere)
@@ -70,11 +68,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UInputAction* SecondWeaponAction;
 
-	void AddSpeed(const FInputActionValue& Value);
-	void DecreaseSpeed(const FInputActionValue& Value);
+	void ChangeSpeed(const FInputActionValue& Value);
 	void Turn(const FInputActionValue& Value);
-	void AddRightRotation(const FInputActionValue& Value);
-	void AddLeftRotation(const FInputActionValue& Value);
+	void ChangeRotation(const FInputActionValue& Value);
 	void PerformShooting(const FInputActionValue& Value);
 	void SwitchAim(const FInputActionValue& Value);
 	void UseFlare(const FInputActionValue& Value);
@@ -82,9 +78,6 @@ protected:
 	void FirstWeapon(const FInputActionValue& Value);
 	void SecondWeapon(const FInputActionValue& Value);
 
-	void PerformTurn(float DeltaTime);
-	void PerformMovementForward(float DeltaTime);
-	void PerformRotation(float DeltaTime);
 	void ChangeCameraFOV(float DeltaTime);
 	void OnTimerSet();
 
@@ -96,13 +89,9 @@ protected:
 	float AimInterpolation = 10.f;
 	UPROPERTY(EditAnywhere)
 	float AimDistance = 20000;
-	float BIsAiming = false;
-
+	bool BIsAiming = false;
+	
 	float CurrentCameraFOV = StandardFOV;
-	FVector CurrentTurnInput;
-	float CurrentRotateInput;
-	FRotator CurrentTurnRotation;
-	FRotator CurrentRotateRotation;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCameraShakeBase> LowDamageCameraShake;

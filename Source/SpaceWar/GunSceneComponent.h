@@ -40,6 +40,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	FVector2D Spread = FVector2D(1, 1);
 	UPROPERTY(EditAnywhere)
+	float FireSpeedPerSec = 100;
+	UPROPERTY(EditAnywhere)
+	float Distance = 1000;
+	UPROPERTY(EditAnywhere)
 	int MaxAmmo = 40;
 	UPROPERTY(EditAnywhere)
 	float TimeToLoadAmmo = 0.5;
@@ -64,8 +68,4 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectileBase> Projectile;
-	UPROPERTY(EditAnywhere)
-	float FireSpeedPerSec = 100;
-	UPROPERTY(EditAnywhere)
-	float Distance = 1000;
 };

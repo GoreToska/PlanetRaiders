@@ -7,18 +7,21 @@
 #include "SpaceShipMovementComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SPACEWAR_API USpaceShipMovementComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	USpaceShipMovementComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
+	void ChangeSpeed(float Value);
+	void Turn(FVector2D Value);
+	void ChangeRotation(float Value);
+	UPROPERTY()
+	AActor* OwningActor;
 
 	UPROPERTY(EditAnywhere)
 	float MaxSpeed = 1500.f;
@@ -31,7 +34,24 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float AimingTurnSpeed = 0.5f;
 	UPROPERTY(EditAnywhere)
-	float InterpolationSpeed = 10;
+	float InterpolationSpeed = 2;
 	UPROPERTY(EditAnywhere)
 	float SpeedChangingMultiplier = 400;
+	bool bIsAiming = false;
+	float CurrentSpeed;
+	FRotator CurrentRotateRotation;
+	FRotator CurrentTurnRotation;
+	FVector CurrentTurnInput;
+	float CurrentRotateInput;
+	
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	void PerformTurn(float DeltaTime, bool IsAiming);
+	void PerformMovementForward(float DeltaTime);
+	void PerformRotation(float DeltaTime);
+	void ClampSpeed();
+
+	
 };

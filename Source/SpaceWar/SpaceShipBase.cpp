@@ -7,6 +7,7 @@
 #include "GunSceneComponent.h"
 #include "PlayerStats.h"
 #include "RegeneratableHealthComponent.h"
+#include "SpaceShipMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -25,8 +26,9 @@ ASpaceShipBase::ASpaceShipBase()
 	BoxComponent->SetEnableGravity(false);
 
 	HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
-	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Player Stats"));
+	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Statistics Component"));
 	DodgeComponent = CreateDefaultSubobject<UDodgeComponent>(TEXT("Dodge Component"));
+	MovementComponent = CreateDefaultSubobject<USpaceShipMovementComponent>(TEXT("Movement COmponent"));
 }
 
 // Called when the game starts or when spawned
