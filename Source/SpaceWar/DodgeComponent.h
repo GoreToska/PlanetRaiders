@@ -24,6 +24,8 @@ public:
 	UCurveFloat* RotationCurve;
 	UPROPERTY(EditAnywhere)
 	float DodgeSpeed = 1000;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DodgeSound;
 
 protected:
 	// Called when the game starts

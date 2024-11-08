@@ -108,14 +108,14 @@ void APlayerShip::UseFlare(const FInputActionValue& Value)
 
 	GetWorld()->GetTimerManager().SetTimer(FlareTimerHandle, this, &APlayerShip::OnTimerSet, FlareCooldown, false);
 
-	//TODO: sound
+	UGameplayStatics::SpawnSoundAttached(FlareSound, GetRootComponent());
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FlareParticles, GetTransform());
 	OnUsedFlare.Broadcast();
 }
 
 void APlayerShip::Dodge(const FInputActionValue& Value)
 {
-	if (MovementComponent->CurrentTurnInput == FVector::Zero())
+	if (MovementComponent->CurrentTurnInput.Y == 0)
 		return;
 
 	FVector DodgeVector = FVector(0, -MovementComponent->CurrentTurnInput.Y, 0);
@@ -190,7 +190,8 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	if (EnhancedInputComponent)
 	{
-		EnhancedInputComponent->BindAction(AddSpeedAction, ETriggerEvent::Triggered, this, &APlayerShip::ChangeSpeed);
+		EnhancedInputComponent->BindAction(ChangeSpeedAction, ETriggerEvent::Triggered, this,
+		                                   &APlayerShip::ChangeSpeed);
 
 		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &APlayerShip::Turn);
 		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Completed, this, &APlayerShip::Turn);
@@ -202,13 +203,13 @@ void APlayerShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(ShotAction, ETriggerEvent::Triggered, this,
 		                                   &APlayerShip::PerformShooting);
-		
+
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerShip::SwitchAim);
-		
+
 		EnhancedInputComponent->BindAction(FlareAction, ETriggerEvent::Triggered, this, &APlayerShip::UseFlare);
-		
+
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &APlayerShip::Dodge);
-		
+
 		EnhancedInputComponent->BindAction(FirstWeaponAction, ETriggerEvent::Triggered, this,
 		                                   &APlayerShip::FirstWeapon);
 		EnhancedInputComponent->BindAction(SecondWeaponAction, ETriggerEvent::Triggered, this,

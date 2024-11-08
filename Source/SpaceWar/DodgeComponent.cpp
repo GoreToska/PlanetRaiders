@@ -4,6 +4,7 @@
 #include "DodgeComponent.h"
 
 #include "SpaceShipBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UDodgeComponent::UDodgeComponent()
@@ -24,7 +25,6 @@ void UDodgeComponent::BeginPlay()
 	if (DodgeCurve)
 	{
 		DodgeCurve->GetTimeRange(MinDodgeTime, MaxDodgeTime);
-		UE_LOG(LogTemp, Warning, TEXT("There is curve on dodge component!"));
 	}
 	else
 	{
@@ -67,10 +67,14 @@ void UDodgeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UDodgeComponent::PerformDodge(const FVector& InputVector)
 {
-	if (DodgeCurve == nullptr) return;
+	if (DodgeCurve == nullptr)
+	{
+		return;
+	}
 	if (bIsDodging) return;
 
 	DodgeSideModifier = InputVector;
 	DodgeSideModifier.Normalize();
 	bIsDodging = true;
+	UGameplayStatics::SpawnSoundAttached(DodgeSound, GetOwner()->GetRootComponent());
 }

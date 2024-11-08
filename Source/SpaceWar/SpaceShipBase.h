@@ -41,7 +41,6 @@ public:
 	UGunSceneComponent* CurrentGun;
 	UPROPERTY(EditAnywhere)
 	USpaceShipMovementComponent* MovementComponent;
-	
 	UPROPERTY(EditAnywhere)
 	USoundBase* GunChangedSound;
 
@@ -66,7 +65,7 @@ protected:
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
-	
+
 	UPROPERTY(EditAnywhere)
 	float FlareCooldown = 10;
 	UPROPERTY(EditAnywhere)

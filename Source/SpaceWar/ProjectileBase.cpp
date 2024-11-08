@@ -3,6 +3,7 @@
 
 #include "ProjectileBase.h"
 #include "HealthComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -48,6 +49,9 @@ void AProjectileBase::BeginPlay()
 
 	//BoxComponent->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHit);
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnBeginOverlap);
+
+	if (LoopSound)
+		SpawnedAudioLoop = UGameplayStatics::SpawnSoundAttached(LoopSound, GetRootComponent());
 }
 
 void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -68,5 +72,9 @@ void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
 	                                         HitEffectScale);
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
+
+	if (SpawnedAudioLoop)
+		SpawnedAudioLoop->Stop();
+
 	Destroy();
 }

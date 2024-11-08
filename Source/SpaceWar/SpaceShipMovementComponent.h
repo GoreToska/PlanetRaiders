@@ -20,6 +20,8 @@ public:
 	void ChangeSpeed(float Value);
 	void Turn(FVector2D Value);
 	void ChangeRotation(float Value);
+	UPROPERTY(EditAnywhere)
+	USoundBase* EngineSound;
 	UPROPERTY()
 	AActor* OwningActor;
 
@@ -43,7 +45,7 @@ public:
 	FRotator CurrentTurnRotation;
 	FVector CurrentTurnInput;
 	float CurrentRotateInput;
-	
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -53,5 +55,6 @@ protected:
 	void PerformRotation(float DeltaTime);
 	void ClampSpeed();
 
-	
+	UPROPERTY()
+	UAudioComponent* EngineAudio;
 };

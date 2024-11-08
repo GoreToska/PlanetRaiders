@@ -27,8 +27,8 @@ ASpaceShipBase::ASpaceShipBase()
 
 	HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
 	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Statistics Component"));
-	DodgeComponent = CreateDefaultSubobject<UDodgeComponent>(TEXT("Dodge Component"));
-	MovementComponent = CreateDefaultSubobject<USpaceShipMovementComponent>(TEXT("Movement COmponent"));
+	//DodgeComponent = CreateDefaultSubobject<UDodgeComponent>(TEXT("Dodge Component"));
+	//MovementComponent = CreateDefaultSubobject<USpaceShipMovementComponent>(TEXT("Movement COmponent"));
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +36,9 @@ void ASpaceShipBase::BeginPlay()
 {
 	Super::BeginPlay();
 	BoxComponent->OnComponentHit.AddDynamic(this, &ASpaceShipBase::OnCollide);
+
+	DodgeComponent = GetComponentByClass<UDodgeComponent>();
+	MovementComponent = GetComponentByClass<USpaceShipMovementComponent>();
 }
 
 void ASpaceShipBase::OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor,

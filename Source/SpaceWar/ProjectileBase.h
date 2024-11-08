@@ -41,6 +41,11 @@ protected:
 	FVector HitEffectScale = FVector(1, 1, 1);
 	UPROPERTY(EditAnywhere)
 	USoundBase* HitSound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* LoopSound;
+
+	UPROPERTY()
+	UAudioComponent* SpawnedAudioLoop;
 	
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;

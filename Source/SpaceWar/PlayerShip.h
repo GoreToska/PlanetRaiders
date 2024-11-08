@@ -46,11 +46,13 @@ protected:
 	UPlayerInventory* PlayerInventory;
 	UPROPERTY(EditAnywhere)
 	USoundBase* AimSound;
-
+	UPROPERTY(EditAnywhere)
+	USoundBase* FlareSound;
+	
 	UPROPERTY(EditAnywhere)
 	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)
-	UInputAction* AddSpeedAction;
+	UInputAction* ChangeSpeedAction;
 	UPROPERTY(EditAnywhere)
 	UInputAction* TurnAction;
 	UPROPERTY(EditAnywhere)

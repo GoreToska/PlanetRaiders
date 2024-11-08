@@ -3,6 +3,7 @@
 
 #include "SpaceShipMovementComponent.h"
 
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -62,6 +63,7 @@ void USpaceShipMovementComponent::BeginPlay()
 
 	OwningActor = GetOwner();
 	CurrentSpeed = MinSpeed;
+	EngineAudio = UGameplayStatics::SpawnSoundAttached(EngineSound, GetOwner()->GetRootComponent());
 	// ...
 }
 
@@ -75,6 +77,9 @@ void USpaceShipMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	PerformRotation(DeltaTime);
 	PerformMovementForward(DeltaTime);
 	PerformTurn(DeltaTime, bIsAiming);
+
+	float NormalizedSpeed = (CurrentSpeed - MinSpeed) / (MaxSpeed - MinSpeed);
+	EngineAudio->SetFloatParameter("Speed", NormalizedSpeed);
 }
 
 void USpaceShipMovementComponent::ChangeSpeed(float Value)

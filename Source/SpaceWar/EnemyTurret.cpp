@@ -95,6 +95,7 @@ void AEnemyTurret::FireShot()
 	FRotator Rotation = FireSocket->GetComponentRotation();
 
 	SetupProjectile(Location, Rotation);
+	UGameplayStatics::SpawnSoundAtLocation(this, ShotSound, GetActorLocation());
 }
 
 void AEnemyTurret::HandleDeath()
@@ -142,7 +143,7 @@ void AEnemyTurret::SetupProjectile(FVector Location, FRotator Rotation)
 {
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	
+
 	AProjectileBase* ProjectileBase = GetWorld()->
 		SpawnActor<AProjectileBase>(Projectile, Location, Rotation, SpawnInfo);
 
