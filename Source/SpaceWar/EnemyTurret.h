@@ -23,7 +23,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* ShotSound;
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,7 +42,8 @@ protected:
 	USceneComponent* FireSocket;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UHealthComponent* HealthComponent;
-	
+	UPROPERTY(EditAnywhere)
+	FVector2D Spread = FVector2D(1, 1);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float FireRate = 800;
 	UPROPERTY(EditAnywhere)
@@ -51,7 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectileBase> Projectile;
 	float ProjectileSpeed;
-	
+
 	UPROPERTY()
 	APlayerShip* PlayerShip;
 	UFUNCTION(BlueprintCallable)
@@ -61,22 +62,22 @@ protected:
 	float BurstShotsCount = 5;
 	UPROPERTY(EditAnywhere)
 	float BurstCooldown = 5;
-	
+
 	float CurrentShot = 0;
 
 	void ShotCooldownEvent();
 
 	void BurstCooldownEvent();
-	
+
 	UPROPERTY()
 	FTimerHandle ShotTimerHandle;
 
 	UPROPERTY()
 	FTimerHandle BurstTimerHandle;
-	
+
 	UFUNCTION(BlueprintCallable)
 	bool CheckDistanceToPlayer();
-	
+
 	UFUNCTION(BlueprintCallable)
 	FVector GetPredictedVector();
 
@@ -85,6 +86,7 @@ protected:
 
 	UFUNCTION()
 	virtual void SetupProjectile(FVector Location, FRotator Rotation);
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

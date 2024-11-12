@@ -31,6 +31,23 @@ ASpaceShipBase::ASpaceShipBase()
 	//MovementComponent = CreateDefaultSubobject<USpaceShipMovementComponent>(TEXT("Movement COmponent"));
 }
 
+void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
+{
+	ProjectilesAfterPlayer.Add(Projectile);
+	OnRocketFollowAdded.Broadcast();
+}
+
+void ASpaceShipBase::RemoveHomingRocket(AHomingProjectile* Projectile)
+{
+	ProjectilesAfterPlayer.Remove(Projectile);
+	OnRocketFollowRemoved.Broadcast();
+}
+
+int ASpaceShipBase::RocketsFollowedCount()
+{
+	return ProjectilesAfterPlayer.Num();
+}
+
 // Called when the game starts or when spawned
 void ASpaceShipBase::BeginPlay()
 {

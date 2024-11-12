@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "SpaceShipBase.generated.h"
 
+class AHomingProjectile;
 class USpaceShipMovementComponent;
 class URegeneratableHealthComponent;
 class UGunSceneComponent;
@@ -27,6 +28,8 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnChose, UGunSceneComponent*, NewGun, UGunSceneComponent*,
 	                                             PreviouseGun);
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFollowedRocketCountChanged);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	URegeneratableHealthComponent* HealthComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -46,6 +49,16 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnChose OnEquipped;
+	UPROPERTY(BlueprintAssignable)
+	FOnFollowedRocketCountChanged OnRocketFollowAdded;
+	UPROPERTY(BlueprintAssignable)
+	FOnFollowedRocketCountChanged OnRocketFollowRemoved;
+	
+	void AddHomingRocket(AHomingProjectile* Projectile);
+	void RemoveHomingRocket(AHomingProjectile* Projectile);
+
+	UFUNCTION(BlueprintCallable)
+	int RocketsFollowedCount();
 
 protected:
 	// Called when the game starts or when spawned
@@ -70,6 +83,9 @@ protected:
 	float FlareCooldown = 10;
 	UPROPERTY(EditAnywhere)
 	float CollideDamage = 100;
+
+	UPROPERTY()
+	TArray<AHomingProjectile*> ProjectilesAfterPlayer;
 
 	UFUNCTION()
 	virtual void OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,

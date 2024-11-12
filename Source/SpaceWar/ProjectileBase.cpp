@@ -54,6 +54,18 @@ void AProjectileBase::BeginPlay()
 		SpawnedAudioLoop = UGameplayStatics::SpawnSoundAttached(LoopSound, GetRootComponent());
 }
 
+void AProjectileBase::HandleHit()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
+	                                         HitEffectScale);
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
+
+	if (SpawnedAudioLoop)
+		SpawnedAudioLoop->Stop();
+
+	Destroy();
+}
+
 void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                      const FHitResult& SweepResult)
@@ -69,12 +81,5 @@ void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 		HealthComponent->GetDamage(Damage);
 	}
 
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
-	                                         HitEffectScale);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
-
-	if (SpawnedAudioLoop)
-		SpawnedAudioLoop->Stop();
-
-	Destroy();
+	HandleHit();
 }

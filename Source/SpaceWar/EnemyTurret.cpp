@@ -144,6 +144,9 @@ void AEnemyTurret::SetupProjectile(FVector Location, FRotator Rotation)
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+	Rotation.Pitch += FMath::RandRange(-Spread.X, Spread.X);
+	Rotation.Yaw += FMath::RandRange(-Spread.Y, Spread.Y);
+
 	AProjectileBase* ProjectileBase = GetWorld()->
 		SpawnActor<AProjectileBase>(Projectile, Location, Rotation, SpawnInfo);
 

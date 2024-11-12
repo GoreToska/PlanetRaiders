@@ -32,6 +32,7 @@ protected:
 	UFUNCTION()
 	void DestroyProjectile();
 	virtual void BeginPlay() override;
+	virtual void HandleHit() override;
 
 private:
 	UPROPERTY()

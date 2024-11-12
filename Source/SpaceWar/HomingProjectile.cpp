@@ -13,12 +13,15 @@ void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
 	PlayerShip = playerShip;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
 	ProjectileMovementComponent->HomingTargetComponent = PlayerShip->GetComponentByClass<UMeshComponent>();
+
 	PlayerShip->OnUsedFlare.AddDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
+	PlayerShip->AddHomingRocket(this);
 }
 
 void AHomingProjectile::ClearProjectileHomingTarget()
 {
 	ProjectileMovementComponent->bIsHomingProjectile = false;
+	PlayerShip->RemoveHomingRocket(this);
 }
 
 void AHomingProjectile::StartProjectileTimer()
@@ -31,10 +34,17 @@ void AHomingProjectile::DestroyProjectile()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, DestroyParticles, GetActorLocation());
 	PlayerShip->OnUsedFlare.RemoveDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
+	PlayerShip->RemoveHomingRocket(this);
 	Destroy();
 }
 
 void AHomingProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AHomingProjectile::HandleHit()
+{
+	Super::HandleHit();
+	PlayerShip->RemoveHomingRocket(this);
 }
