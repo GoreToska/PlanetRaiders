@@ -4,7 +4,7 @@
 #include "HealthComponent.h"
 #include "RegeneratableHealthComponent.generated.h"
 
-UCLASS()
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SPACEWAR_API URegeneratableHealthComponent : public UHealthComponent
 {
 	GENERATED_BODY()

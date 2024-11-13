@@ -38,6 +38,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FGotDamageDelegate OnGetDamage;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* DeathSound;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -43,6 +43,12 @@ void UHealthComponent::Death()
 {
 	// TODO:Sound
 	DestroyEffect();
+
+	if (DeathSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(this, DeathSound, GetOwner()->GetActorLocation());
+	}
+
 	CurrentHP = 0;
 	OnSetHealth.Broadcast(CurrentHP);
 	Cast<IDestructible>(GetOwner())->HandleDeath();
@@ -80,6 +86,6 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
 	// ...
 }
