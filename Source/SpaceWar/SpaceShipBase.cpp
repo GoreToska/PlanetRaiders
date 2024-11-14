@@ -8,6 +8,7 @@
 #include "PlayerStats.h"
 #include "RegeneratableHealthComponent.h"
 #include "SpaceShipMovementComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -35,12 +36,21 @@ void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
 {
 	ProjectilesAfterPlayer.Add(Projectile);
 	OnRocketFollowAdded.Broadcast();
+
+
+	if (!AlarmSpawnedSound->IsPlaying())
+		AlarmSpawnedSound->Play();
 }
 
 void ASpaceShipBase::RemoveHomingRocket(AHomingProjectile* Projectile)
 {
 	ProjectilesAfterPlayer.Remove(Projectile);
 	OnRocketFollowRemoved.Broadcast();
+
+	if (ProjectilesAfterPlayer.Num() > 0)
+		return;
+
+		AlarmSpawnedSound->Stop();
 }
 
 int ASpaceShipBase::RocketsFollowedCount()
@@ -56,6 +66,9 @@ void ASpaceShipBase::BeginPlay()
 
 	DodgeComponent = GetComponentByClass<UDodgeComponent>();
 	MovementComponent = GetComponentByClass<USpaceShipMovementComponent>();
+	AlarmSpawnedSound = GetComponentByClass<UAudioComponent>();
+	AlarmSpawnedSound->Sound = RocketAlarmSound;
+	AlarmSpawnedSound->Stop();
 }
 
 void ASpaceShipBase::OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor,

@@ -46,14 +46,20 @@ public:
 	USpaceShipMovementComponent* MovementComponent;
 	UPROPERTY(EditAnywhere)
 	USoundBase* GunChangedSound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* RocketAlarmSound;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY()
+	UAudioComponent* AlarmSpawnedSound;
+
+	UPROPERTY
+	(BlueprintAssignable)
 	FOnChose OnEquipped;
 	UPROPERTY(BlueprintAssignable)
 	FOnFollowedRocketCountChanged OnRocketFollowAdded;
 	UPROPERTY(BlueprintAssignable)
 	FOnFollowedRocketCountChanged OnRocketFollowRemoved;
-	
+
 	void AddHomingRocket(AHomingProjectile* Projectile);
 	void RemoveHomingRocket(AHomingProjectile* Projectile);
 
