@@ -5,7 +5,6 @@
 
 #include "PlayerShip.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 
 void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
@@ -32,7 +31,7 @@ void AHomingProjectile::StartProjectileTimer()
 
 void AHomingProjectile::DestroyProjectile()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, DestroyParticles, GetActorLocation());
+	CreateSoundAndFX();
 	PlayerShip->OnUsedFlare.RemoveDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
 	PlayerShip->RemoveHomingRocket(this);
 	Destroy();
@@ -46,5 +45,6 @@ void AHomingProjectile::BeginPlay()
 void AHomingProjectile::HandleHit()
 {
 	Super::HandleHit();
+	
 	PlayerShip->RemoveHomingRocket(this);
 }

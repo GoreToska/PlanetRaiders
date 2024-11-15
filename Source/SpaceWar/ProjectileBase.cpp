@@ -54,16 +54,63 @@ void AProjectileBase::BeginPlay()
 		SpawnedAudioLoop = UGameplayStatics::SpawnSoundAttached(LoopSound, GetRootComponent());
 }
 
-void AProjectileBase::HandleHit()
+void AProjectileBase::CreateSoundAndFX()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
 	                                         HitEffectScale);
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
+}
+
+void AProjectileBase::GetSplashDamage()
+{
+	TArray<AActor*> Actors;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwner());
+	DrawDebugSphere(GetWorld(), GetActorLocation(), SplashRadius, 32, FColor::Red, false, 10);
+	UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(),
+		GetActorLocation(),
+		SplashRadius,
+		ObjectTypes,
+		AActor::StaticClass(),
+		ActorsToIgnore,
+		Actors);
+	
+	UE_LOG(LogTemp, Warning, TEXT("%d"), Actors.Num());
+
+	if (Actors.Num() <= 0)
+	{
+		return;
+	}
+
+	for (AActor* a : Actors)
+	{
+		UHealthComponent* health = a->GetComponentByClass<UHealthComponent>();
+		if (!health)
+			continue;
+
+		health->GetDamage(SplashDamage);
+	}
+}
+
+void AProjectileBase::HandleHit()
+{
+	CreateSoundAndFX();
+
+	if (SplashRadius > 0)
+		GetSplashDamage();
+
 
 	if (SpawnedAudioLoop)
 		SpawnedAudioLoop->Stop();
 
 	Destroy();
+}
+
+void AProjectileBase::DestroyProjectile()
+{
 }
 
 void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,

@@ -30,10 +30,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DestroyParticles;
 	UFUNCTION()
-	void DestroyProjectile();
 	virtual void BeginPlay() override;
 	virtual void HandleHit() override;
-
+	virtual void DestroyProjectile() override;
+	
 private:
 	UPROPERTY()
 	APlayerShip* PlayerShip;

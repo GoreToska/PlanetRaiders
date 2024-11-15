@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Destructible.h"
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
 
@@ -26,7 +27,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	void CreateSoundAndFX();
+	void GetSplashDamage();
 	virtual void HandleHit();
+	virtual void DestroyProjectile();
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
@@ -44,13 +48,16 @@ protected:
 	USoundBase* HitSound;
 	UPROPERTY(EditAnywhere)
 	USoundBase* LoopSound;
-
+	UPROPERTY(EditAnywhere)
+	float SplashRadius = 0;
 	UPROPERTY()
 	UAudioComponent* SpawnedAudioLoop;
-	
+
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
-
+	UPROPERTY(EditAnywhere)
+	float SplashDamage = 10;
+	
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
