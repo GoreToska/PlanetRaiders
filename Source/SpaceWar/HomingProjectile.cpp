@@ -23,18 +23,11 @@ void AHomingProjectile::ClearProjectileHomingTarget()
 	PlayerShip->RemoveHomingRocket(this);
 }
 
-void AHomingProjectile::StartProjectileTimer()
-{
-	GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &AHomingProjectile::DestroyProjectile, 1, false,
-	                                       TimeToLive);
-}
-
 void AHomingProjectile::DestroyProjectile()
 {
-	CreateSoundAndFX();
 	PlayerShip->OnUsedFlare.RemoveDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
 	PlayerShip->RemoveHomingRocket(this);
-	Destroy();
+	Super::DestroyProjectile();
 }
 
 void AHomingProjectile::BeginPlay()
@@ -45,6 +38,6 @@ void AHomingProjectile::BeginPlay()
 void AHomingProjectile::HandleHit()
 {
 	Super::HandleHit();
-	
+
 	PlayerShip->RemoveHomingRocket(this);
 }

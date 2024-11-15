@@ -31,6 +31,14 @@ protected:
 	void GetSplashDamage();
 	virtual void HandleHit();
 	virtual void DestroyProjectile();
+	virtual void StartProjectileTimer();
+
+	UPROPERTY()
+	FTimerHandle DestructionTimer;
+	UPROPERTY(EditAnywhere)
+	float TimeToLive = 5.f;
+	//UPROPERTY(EditAnywhere)
+	//UParticleSystem* DestroyParticles;
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
@@ -57,7 +65,7 @@ protected:
 	float Damage = 10;
 	UPROPERTY(EditAnywhere)
 	float SplashDamage = 10;
-	
+
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

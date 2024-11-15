@@ -17,19 +17,11 @@ class SPACEWAR_API AHomingProjectile : public AProjectileBase
 
 public:
 	void SetProjectileHomingTarget(APlayerShip* playerShip);
-	void StartProjectileTimer();
 
 	UFUNCTION()
 	void ClearProjectileHomingTarget();
 	
 protected:
-	UPROPERTY()
-	FTimerHandle DestructionTimer;
-	UPROPERTY(EditAnywhere)
-	float TimeToLive = 10.f;
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* DestroyParticles;
-	UFUNCTION()
 	virtual void BeginPlay() override;
 	virtual void HandleHit() override;
 	virtual void DestroyProjectile() override;

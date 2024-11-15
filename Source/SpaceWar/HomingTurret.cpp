@@ -20,5 +20,4 @@ void AHomingTurret::SetupProjectile(FVector Location, FRotator Rotation)
 
 	HomingProjectile->SetOwner(this);
 	HomingProjectile->SetProjectileHomingTarget(PlayerShip);
-	HomingProjectile->StartProjectileTimer();
 }

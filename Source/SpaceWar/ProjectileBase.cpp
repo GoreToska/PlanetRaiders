@@ -52,13 +52,18 @@ void AProjectileBase::BeginPlay()
 
 	if (LoopSound)
 		SpawnedAudioLoop = UGameplayStatics::SpawnSoundAttached(LoopSound, GetRootComponent());
+
+	StartProjectileTimer();
 }
 
 void AProjectileBase::CreateSoundAndFX()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
-	                                         HitEffectScale);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
+	if (HitEffect)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
+		                                         HitEffectScale);
+
+	if (HitSound)
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
 }
 
 void AProjectileBase::GetSplashDamage()
@@ -77,7 +82,7 @@ void AProjectileBase::GetSplashDamage()
 		AActor::StaticClass(),
 		ActorsToIgnore,
 		Actors);
-	
+
 	UE_LOG(LogTemp, Warning, TEXT("%d"), Actors.Num());
 
 	if (Actors.Num() <= 0)
@@ -111,6 +116,15 @@ void AProjectileBase::HandleHit()
 
 void AProjectileBase::DestroyProjectile()
 {
+	CreateSoundAndFX();
+	GetSplashDamage();
+	Destroy();
+}
+
+void AProjectileBase::StartProjectileTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &AProjectileBase::DestroyProjectile, 1, false,
+	                                       TimeToLive);
 }
 
 void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
