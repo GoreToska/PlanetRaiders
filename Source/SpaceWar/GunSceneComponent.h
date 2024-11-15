@@ -26,6 +26,8 @@ public:
 	void LoadAmmo();
 	void SpendAmmo();
 	void PlayShotSound(USceneComponent* ActorRoot);
+	UFUNCTION(BlueprintCallable)
+	int GetAmmo();
 	FVector2D GetFirstCrosshairPosition() const;
 	FVector2D GetSecondCrosshairPosition() const;
 

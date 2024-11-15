@@ -28,8 +28,6 @@ ASpaceShipBase::ASpaceShipBase()
 
 	HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
 	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Statistics Component"));
-	//DodgeComponent = CreateDefaultSubobject<UDodgeComponent>(TEXT("Dodge Component"));
-	//MovementComponent = CreateDefaultSubobject<USpaceShipMovementComponent>(TEXT("Movement COmponent"));
 }
 
 void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)

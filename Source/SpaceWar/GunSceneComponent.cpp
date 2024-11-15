@@ -96,6 +96,11 @@ void UGunSceneComponent::PlayShotSound(USceneComponent* ActorRoot)
 	UGameplayStatics::SpawnSoundAttached(ShotSound, ActorRoot);
 }
 
+int UGunSceneComponent::GetAmmo()
+{
+	return CurrentAmmo;
+}
+
 FVector2D UGunSceneComponent::GetFirstCrosshairPosition() const
 {
 	FVector2D ScreenLocation;
