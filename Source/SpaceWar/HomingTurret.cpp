@@ -14,10 +14,11 @@ void AHomingTurret::SetupProjectile(FVector Location, FRotator Rotation)
 
 	AHomingProjectile* HomingProjectile = GetWorld()->
 		SpawnActor<AHomingProjectile>(Projectile, Location, Rotation, SpawnInfo);
-	
+
 	if (!this || !HomingProjectile)
 		return;
 
 	HomingProjectile->SetOwner(this);
 	HomingProjectile->SetProjectileHomingTarget(PlayerShip);
+	HomingProjectile->SetProjectileDamageModifier(1 + (CurrentUpgrade - 1) * IncreaseExponent);
 }

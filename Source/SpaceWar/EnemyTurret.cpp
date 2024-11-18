@@ -6,6 +6,8 @@
 #include "HealthComponent.h"
 #include "PlayerShip.h"
 #include "ProjectileBase.h"
+#include "SpaceGameMode.h"
+#include "WorldDifficulty.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -43,6 +45,12 @@ void AEnemyTurret::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerShip = Cast<APlayerShip>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->
+		GetCurrentUpgrade();
+
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.AddDynamic(
+		this, &AEnemyTurret::Upgrade);
 }
 
 void AEnemyTurret::RotateTowardsPlayer()
@@ -51,6 +59,12 @@ void AEnemyTurret::RotateTowardsPlayer()
 	                                                                 PlayerShip->GetActorLocation());
 	if (PlayerShip)
 		TurretHeadSocket->SetWorldRotation(LookAtRotation);
+}
+
+void AEnemyTurret::Upgrade(int Upgrade)
+{
+	CurrentUpgrade = Upgrade;
+	UE_LOG(LogTemp, Warning, TEXT("Upgrade %d"), CurrentUpgrade);
 }
 
 // Called every frame
@@ -100,6 +114,9 @@ void AEnemyTurret::FireShot()
 
 void AEnemyTurret::HandleDeath()
 {
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.RemoveDynamic(
+		this, &AEnemyTurret::Upgrade);
+
 	Destroy();
 }
 
@@ -154,4 +171,5 @@ void AEnemyTurret::SetupProjectile(FVector Location, FRotator Rotation)
 		return;
 
 	ProjectileBase->SetOwner(this);
+	ProjectileBase->SetProjectileDamageModifier(1 + (CurrentUpgrade - 1) * IncreaseExponent);
 }

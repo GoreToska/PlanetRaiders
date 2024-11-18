@@ -87,6 +87,14 @@ protected:
 	UFUNCTION()
 	virtual void SetupProjectile(FVector Location, FRotator Rotation);
 
+	UPROPERTY(EditAnywhere)
+	float IncreaseExponent = 0.2;
+
+	int CurrentUpgrade;
+
+	UFUNCTION()
+	void Upgrade(int Upgrade);
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

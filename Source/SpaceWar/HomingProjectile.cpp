@@ -11,7 +11,7 @@ void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
 {
 	PlayerShip = playerShip;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
-	ProjectileMovementComponent->HomingTargetComponent = PlayerShip->GetComponentByClass<UMeshComponent>();
+	ProjectileMovementComponent->HomingTargetComponent = PlayerShip->GetRootComponent();
 
 	PlayerShip->OnUsedFlare.AddDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
 	PlayerShip->AddHomingRocket(this);
