@@ -36,7 +36,7 @@ AEnemyTurret::AEnemyTurret()
 	FireSocket = CreateDefaultSubobject<USceneComponent>(TEXT("Fire Socket"));
 	FireSocket->SetupAttachment(TurretHead);
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	//HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +44,7 @@ void AEnemyTurret::BeginPlay()
 {
 	Super::BeginPlay();
 
+	HealthComponent = GetComponentByClass<UHealthComponent>();
 	PlayerShip = Cast<APlayerShip>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->

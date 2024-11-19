@@ -39,7 +39,7 @@ float AProjectileBase::GetProjectileSpeed()
 
 void AProjectileBase::SetProjectileDamageModifier(float modifier)
 {
-	Damage *= modifier;
+	DamageModifier = modifier;
 }
 
 // Called when the game starts or when spawned
@@ -70,10 +70,9 @@ void AProjectileBase::GetSplashDamage()
 {
 	TArray<AActor*> Actors;
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
-	DrawDebugSphere(GetWorld(), GetActorLocation(), SplashRadius, 32, FColor::Red, false, 10);
+	ActorsToIgnore.Add(HitActor);
 	UKismetSystemLibrary::SphereOverlapActors(
 		GetWorld(),
 		GetActorLocation(),
@@ -82,8 +81,6 @@ void AProjectileBase::GetSplashDamage()
 		AActor::StaticClass(),
 		ActorsToIgnore,
 		Actors);
-
-	UE_LOG(LogTemp, Warning, TEXT("%d"), Actors.Num());
 
 	if (Actors.Num() <= 0)
 	{
@@ -96,7 +93,7 @@ void AProjectileBase::GetSplashDamage()
 		if (!health)
 			continue;
 
-		health->GetDamage(SplashDamage);
+		health->GetDamage(SplashDamage * DamageModifier);
 	}
 }
 
@@ -139,7 +136,11 @@ void AProjectileBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 
 	if (UHealthComponent* HealthComponent = OtherActor->GetComponentByClass<UHealthComponent>())
 	{
-		HealthComponent->GetDamage(Damage);
+		if (GetOwner() && HealthComponent->Team != GetOwner()->GetComponentByClass<UHealthComponent>()->Team)
+		{
+			HealthComponent->GetDamage(Damage * DamageModifier);
+			HitActor = OtherActor;
+		}
 	}
 
 	HandleHit();

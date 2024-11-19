@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TeamsEnum.h"
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
@@ -40,6 +41,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* DeathSound;
+
+	UPROPERTY(EditAnywhere)
+	ETeamsEnum Team;
 
 protected:
 	// Called when the game starts

@@ -60,12 +60,13 @@ protected:
 	float SplashRadius = 0;
 	UPROPERTY()
 	UAudioComponent* SpawnedAudioLoop;
-
+	UPROPERTY()
+	AActor* HitActor = nullptr;
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
 	UPROPERTY(EditAnywhere)
 	float SplashDamage = 10;
-
+	float DamageModifier = 1;
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
