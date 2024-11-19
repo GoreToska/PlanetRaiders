@@ -4,6 +4,8 @@
 #include "CargoCarrier.h"
 #include "HealthComponent.h"
 #include "PlayerInventory.h"
+#include "SpaceGameMode.h"
+#include "WorldDifficulty.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -27,6 +29,12 @@ void ACargoCarrier::BeginPlay()
 
 	Inventory = UGameplayStatics::GetPlayerPawn(this, 0)
 		->GetComponentByClass<UPlayerInventory>();
+
+	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->
+		GetCurrentUpgrade();
+
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.AddDynamic(
+		this, &ACargoCarrier::Upgrade);
 }
 
 // Called every frame
@@ -44,8 +52,10 @@ void ACargoCarrier::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ACargoCarrier::HandleDeath()
 {
-	Destroy();
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.RemoveDynamic(
+		this, &ACargoCarrier::Upgrade);
 	GetReward();
+	Destroy();
 }
 
 void ACargoCarrier::GetReward()
@@ -54,6 +64,12 @@ void ACargoCarrier::GetReward()
 		return;
 
 	Inventory->AddItem(CarryItem.GetDefaultObject());
+}
+
+void ACargoCarrier::Upgrade(int Upgrade)
+{
+	CurrentUpgrade = Upgrade;
+	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
 }
 
 void ACargoCarrier::MoveForward(float deltaTime)

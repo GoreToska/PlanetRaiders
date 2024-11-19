@@ -64,7 +64,7 @@ void AEnemyTurret::RotateTowardsPlayer()
 void AEnemyTurret::Upgrade(int Upgrade)
 {
 	CurrentUpgrade = Upgrade;
-	UE_LOG(LogTemp, Warning, TEXT("Upgrade %d"), CurrentUpgrade);
+	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
 }
 
 // Called every frame

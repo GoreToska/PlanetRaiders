@@ -49,9 +49,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UItemDataAsset> CarryItem;
 
+	UFUNCTION()
+	void Upgrade(int Upgrade);
+
 private:
 	UPROPERTY(EditAnywhere)
 	float MoveSpeed = 500;
-
 	void MoveForward(float deltaTime);
+
+	UPROPERTY(EditAnywhere)
+	float IncreaseExponent = 0.2;
+	int CurrentUpgrade = 0;
 };

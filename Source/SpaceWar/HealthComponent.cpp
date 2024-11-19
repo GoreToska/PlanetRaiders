@@ -62,7 +62,9 @@ void UHealthComponent::DestroyEffect()
 
 void UHealthComponent::SetNewMaxHealth(float health)
 {
+	float NewCurrentHPModifier = CurrentHP / MaxHP;
 	MaxHP = health;
+	CurrentHP = MaxHP * NewCurrentHPModifier;
 	OnSetHealth.Broadcast(CurrentHP);
 }
 

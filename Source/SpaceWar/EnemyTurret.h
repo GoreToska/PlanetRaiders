@@ -62,34 +62,26 @@ protected:
 	float BurstShotsCount = 5;
 	UPROPERTY(EditAnywhere)
 	float BurstCooldown = 5;
-
 	float CurrentShot = 0;
 
 	void ShotCooldownEvent();
-
 	void BurstCooldownEvent();
 
 	UPROPERTY()
 	FTimerHandle ShotTimerHandle;
-
 	UPROPERTY()
 	FTimerHandle BurstTimerHandle;
 
 	UFUNCTION(BlueprintCallable)
 	bool CheckDistanceToPlayer();
-
 	UFUNCTION(BlueprintCallable)
 	FVector GetPredictedVector();
-
 	UFUNCTION(BlueprintCallable)
 	void RotateTowardsPredictedPosition();
-
 	UFUNCTION()
 	virtual void SetupProjectile(FVector Location, FRotator Rotation);
-
 	UPROPERTY(EditAnywhere)
 	float IncreaseExponent = 0.2;
-
 	int CurrentUpgrade;
 
 	UFUNCTION()
