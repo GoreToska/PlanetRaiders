@@ -37,7 +37,9 @@ void AHomingProjectile::BeginPlay()
 
 void AHomingProjectile::HandleHit()
 {
-	Super::HandleHit();
+	if (this)
+		PlayerShip->RemoveHomingRocket(this);
 
-	PlayerShip->RemoveHomingRocket(this);
+	UE_LOG(LogTemp, Display, TEXT("this null - %hhd, player null - %hhd"), this == nullptr, PlayerShip == nullptr);
+	Super::HandleHit();
 }

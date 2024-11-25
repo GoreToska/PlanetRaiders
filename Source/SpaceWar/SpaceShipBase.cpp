@@ -34,6 +34,7 @@ void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
 {
 	ProjectilesAfterPlayer.Add(Projectile);
 	OnRocketFollowAdded.Broadcast();
+	UE_LOG(LogTemp, Display, TEXT("Rocket added, %d"), ProjectilesAfterPlayer.Num());
 
 
 	if (!AlarmSpawnedSound->IsPlaying())
@@ -48,7 +49,7 @@ void ASpaceShipBase::RemoveHomingRocket(AHomingProjectile* Projectile)
 	if (ProjectilesAfterPlayer.Num() > 0)
 		return;
 
-		AlarmSpawnedSound->Stop();
+	AlarmSpawnedSound->Stop();
 }
 
 int ASpaceShipBase::RocketsFollowedCount()

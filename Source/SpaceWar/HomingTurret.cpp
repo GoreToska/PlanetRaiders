@@ -10,7 +10,7 @@
 void AHomingTurret::SetupProjectile(FVector Location, FRotator Rotation)
 {
 	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
 	AHomingProjectile* HomingProjectile = GetWorld()->
 		SpawnActor<AHomingProjectile>(Projectile, Location, Rotation, SpawnInfo);
