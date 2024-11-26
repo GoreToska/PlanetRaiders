@@ -19,6 +19,11 @@ public:
 	// Sets default values for this actor's properties
 	AEnemyHouse();
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDestroyed, AEnemyHouse*, Value);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDestroyed OnBuildingDestroyed;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

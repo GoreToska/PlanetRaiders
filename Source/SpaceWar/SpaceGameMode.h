@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceGameMode.generated.h"
 
+class ABossBase;
 class AWorldDifficulty;
 /**
  * 
@@ -19,9 +20,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AWorldDifficulty* GetWorldDifficulty();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<ABossBase> LevelBoss;
+
+	UFUNCTION(BlueprintCallable)
+	ABossBase* SpawnBoss(FTransform Transform);
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBossSpawned);
+
+	UPROPERTY(BlueprintAssignable)
+	FBossSpawned OnBossSpawned;
+
 protected:
 	virtual void BeginPlay() override;
-	
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AWorldDifficulty> WorldDifficultyObject;
 

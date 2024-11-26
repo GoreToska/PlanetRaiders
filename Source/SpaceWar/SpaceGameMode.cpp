@@ -3,11 +3,26 @@
 
 #include "SpaceGameMode.h"
 
+#include "BossBase.h"
 #include "WorldDifficulty.h"
+#include "Kismet/GameplayStatics.h"
 
 AWorldDifficulty* ASpaceGameMode::GetWorldDifficulty()
 {
 	return WorldDifficulty;
+}
+
+ABossBase* ASpaceGameMode::SpawnBoss(FTransform Transform)
+{
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	ABossBase* Boss = GetWorld()->
+		SpawnActor<ABossBase>(LevelBoss, Transform, SpawnInfo);
+
+	OnBossSpawned.Broadcast();
+
+	return Boss;
 }
 
 void ASpaceGameMode::BeginPlay()
@@ -20,8 +35,6 @@ void ASpaceGameMode::BeginPlay()
 	WorldDifficulty = GetWorld()->
 		SpawnActor<AWorldDifficulty>(WorldDifficultyObject, Location, Rotation, SpawnInfo);
 	UE_LOG(LogTemp, Warning, TEXT("%hhd"), WorldDifficulty != nullptr);
-	
-	Super::BeginPlay();
 
-	
+	Super::BeginPlay();
 }

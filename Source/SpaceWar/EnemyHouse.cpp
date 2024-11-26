@@ -35,5 +35,6 @@ void AEnemyHouse::Tick(float DeltaTime)
 
 void AEnemyHouse::HandleDeath()
 {
+	OnBuildingDestroyed.Broadcast(this);
 	Destroy();
 }
