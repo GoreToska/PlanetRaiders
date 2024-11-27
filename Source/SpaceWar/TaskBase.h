@@ -17,7 +17,7 @@ public:
 
 	void CompleteTask();
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTaskCompleted);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTaskCompleted, ATaskBase*, value);
 
 	UPROPERTY(BlueprintAssignable)
 	FTaskCompleted OnCompleted;

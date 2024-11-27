@@ -4,6 +4,7 @@
 #include "SpaceGameMode.h"
 
 #include "BossBase.h"
+#include "TaskBase.h"
 #include "WorldDifficulty.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -34,7 +35,30 @@ void ASpaceGameMode::BeginPlay()
 
 	WorldDifficulty = GetWorld()->
 		SpawnActor<AWorldDifficulty>(WorldDifficultyObject, Location, Rotation, SpawnInfo);
-	UE_LOG(LogTemp, Warning, TEXT("%hhd"), WorldDifficulty != nullptr);
+
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATaskBase::StaticClass(), actors);
+
+	for (auto Actor : actors)
+	{
+		ATaskBase* task = Cast<ATaskBase>(Actor);
+		if (task)
+		{
+			Tasks.Add(task);
+			task->OnCompleted.AddDynamic(this, &ASpaceGameMode::OnTaskCompleted);
+		}
+	}
 
 	Super::BeginPlay();
+}
+
+void ASpaceGameMode::OnTaskCompleted(ATaskBase* Task)
+{
+	OnTaskComplete.Broadcast(Task);
+	Tasks.Remove(Task);
+
+	if (Tasks.Num() <= 0)
+	{
+		OnAllTasksCompleted.Broadcast();
+	}
 }

@@ -32,7 +32,6 @@ void ADestroyBuildingTask::OnBuildingDestroyed(AEnemyHouse* Building)
 {
 	TArray<AActor*> OutActors;
 	Building->GetAttachedActors(OutActors);
-	
 	for (auto OutActor : OutActors)
 	{
 		OutActor->Destroy();

@@ -74,6 +74,9 @@ void AEnemyTurret::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//RotateTowardsPredictedPosition();
 
+	DrawDebugLine(GetWorld(), TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 100,
+	              TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 1000, FColor::Red);
+
 	RotateTowardsPlayer();
 
 	if (GetWorld()->GetTimerManager().IsTimerActive(BurstTimerHandle))
@@ -106,8 +109,9 @@ void AEnemyTurret::FireShot()
 	GetWorld()->GetTimerManager().SetTimer(ShotTimerHandle, this, &AEnemyTurret::ShotCooldownEvent, 60 / FireRate,
 	                                       false);
 
-	FVector Location = FireSocket->GetComponentLocation();
-	FRotator Rotation = FireSocket->GetComponentRotation();
+
+	FVector Location = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 100;
+	FRotator Rotation = TurretHead->GetComponentRotation();
 
 	SetupProjectile(Location, Rotation);
 	UGameplayStatics::SpawnSoundAtLocation(this, ShotSound, GetActorLocation());

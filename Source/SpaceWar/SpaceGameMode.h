@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceGameMode.generated.h"
 
+class ATaskBase;
 class ABossBase;
 class AWorldDifficulty;
 /**
@@ -27,16 +28,27 @@ public:
 	ABossBase* SpawnBoss(FTransform Transform);
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBossSpawned);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTasksCompleted);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTaskCompleted, ATaskBase*, value);
 
 	UPROPERTY(BlueprintAssignable)
 	FBossSpawned OnBossSpawned;
+	UPROPERTY(BlueprintAssignable)
+	FBossSpawned OnAllTasksCompleted;
+	UPROPERTY(BlueprintAssignable)
+	FTaskCompleted OnTaskComplete;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<ATaskBase*> Tasks;
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AWorldDifficulty> WorldDifficultyObject;
-
 	UPROPERTY()
 	AWorldDifficulty* WorldDifficulty;
+
+	UFUNCTION()
+	void OnTaskCompleted(ATaskBase* Task);
 };

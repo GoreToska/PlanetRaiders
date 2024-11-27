@@ -12,7 +12,7 @@ ATaskBase::ATaskBase()
 
 void ATaskBase::CompleteTask()
 {
-	OnCompleted.Broadcast();
+	OnCompleted.Broadcast(this);
 	Destroy();
 }
 
