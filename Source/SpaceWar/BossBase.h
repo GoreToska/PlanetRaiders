@@ -28,6 +28,23 @@ public:
 
 	virtual void HandleDeath() override;
 
+	UFUNCTION(BlueprintCallable)
+	void RotateTowardsPlayer();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void TeleportToPlayer();
+
+	UPROPERTY(EditAnywhere)
+	float TimeToTeleport = 20;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FString BossName = "Boss";
+	UPROPERTY(EditAnywhere)
+	float FirstTeleportDelay = 3;
+	UPROPERTY(EditAnywhere)
+	float RotationTime = 5;
+	FTimerHandle TeleportTimer;
+	FTimerHandle RotationTimer;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,6 +53,15 @@ protected:
 	int EnginesCount;
 	UFUNCTION()
 	void OnEngineDead();
+
+	UPROPERTY(EditAnywhere)
+	FVector MinTeleportRadius = FVector(500, 500, 500);
+	UPROPERTY(EditAnywhere)
+	FVector MaxTeleportRadius = FVector(1000, 1000, 1000);
+
+	int GetRandomModifier();
+
+	bool bIsRotating = false;
 
 public:
 	// Called every frame

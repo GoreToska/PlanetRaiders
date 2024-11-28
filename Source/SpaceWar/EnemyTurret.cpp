@@ -91,7 +91,7 @@ void AEnemyTurret::Tick(float DeltaTime)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(ShotTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(BurstTimerHandle, this, &AEnemyTurret::BurstCooldownEvent,
-		                                       BurstCooldown, false);
+		                                       FMath::RandRange(MinBurstCooldown, MaxBurstCooldown), false);
 	}
 }
 

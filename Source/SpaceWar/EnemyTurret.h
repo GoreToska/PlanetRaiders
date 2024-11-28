@@ -61,7 +61,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float BurstShotsCount = 5;
 	UPROPERTY(EditAnywhere)
-	float BurstCooldown = 5;
+	float MinBurstCooldown = 3;
+	UPROPERTY(EditAnywhere)
+	float MaxBurstCooldown = 10;
 	float CurrentShot = 0;
 
 	void ShotCooldownEvent();
