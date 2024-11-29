@@ -9,6 +9,7 @@
 
 class UModularBossHealthComponent;
 class ASpaceEngine;
+class UNiagaraSystem;
 
 UCLASS()
 class SPACEWAR_API ABossBase : public APawn, public IDestructible
@@ -20,6 +21,9 @@ public:
 	ABossBase();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UModularBossHealthComponent* HealthComponent;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* TeleportParticles;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBossDestroyed);
 

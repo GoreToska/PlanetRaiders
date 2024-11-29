@@ -46,8 +46,8 @@ protected:
 	USceneComponent* SceneComponent;
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
-	UPROPERTY(EditAnywhere)
-	UParticleSystemComponent* ParticleSystemComponent;
+	//UPROPERTY(EditAnywhere)
+	//UParticleSystemComponent* ParticleSystemComponent;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* HitEffect;
 	UPROPERTY(EditAnywhere)

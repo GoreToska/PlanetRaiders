@@ -20,8 +20,8 @@ AProjectileBase::AProjectileBase()
 	BoxComponent->SetCollisionProfileName(TEXT("BlockAllDinamics"));
 	SetRootComponent(BoxComponent);
 
-	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particles"));
-	ParticleSystemComponent->SetupAttachment(BoxComponent);
+	//ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particles"));
+	//ParticleSystemComponent->SetupAttachment(BoxComponent);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
 }

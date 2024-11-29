@@ -7,6 +7,7 @@
 #include "SpaceEngine.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ABossBase::ABossBase()
@@ -39,17 +40,21 @@ void ABossBase::RotateTowardsPlayer()
 
 void ABossBase::TeleportToPlayer()
 {
+	FVector PlayerPosition = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
+
 	float XCoordinate = FMath::RandRange(MinTeleportRadius.X, MaxTeleportRadius.X) * GetRandomModifier();
 	float YCoordinate = FMath::RandRange(MinTeleportRadius.Y, MaxTeleportRadius.Y) * GetRandomModifier();
 	float ZCoordinate = FMath::RandRange(MinTeleportRadius.Z, MaxTeleportRadius.Z);
+	if (PlayerPosition.Z > MaxTeleportRadius.Z)
+		ZCoordinate *= GetRandomModifier();
 
-	FVector PlayerPosition = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	FVector NewPosittion = FVector(
 		PlayerPosition.X + XCoordinate,
 		PlayerPosition.Y + YCoordinate,
 		PlayerPosition.Z + ZCoordinate);
 
 	SetActorLocation(NewPosittion);
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TeleportParticles, NewPosittion);
 	bIsRotating = true;
 	GetWorldTimerManager().SetTimer(RotationTimer,
 	                                FTimerDelegate::CreateLambda([this]
