@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceGameMode.generated.h"
 
+class USpaceGameInstance;
 class ATaskBase;
 class ABossBase;
 class AWorldDifficulty;
@@ -19,8 +20,7 @@ class SPACEWAR_API ASpaceGameMode : public AGameModeBase
 
 public:
 	UFUNCTION(BlueprintCallable)
-	AWorldDifficulty* GetWorldDifficulty();
-
+	USpaceGameInstance* GetGameInstance();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<ABossBase> LevelBoss;
 
@@ -41,13 +41,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<ATaskBase*> Tasks;
 
+	UPROPERTY(BlueprintReadOnly)
+	USpaceGameInstance* GameInstance;
+
 protected:
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AWorldDifficulty> WorldDifficultyObject;
-	UPROPERTY()
-	AWorldDifficulty* WorldDifficulty;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION()
 	void OnTaskCompleted(ATaskBase* Task);

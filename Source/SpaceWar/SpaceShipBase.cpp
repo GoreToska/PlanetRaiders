@@ -60,7 +60,6 @@ int ASpaceShipBase::RocketsFollowedCount()
 // Called when the game starts or when spawned
 void ASpaceShipBase::BeginPlay()
 {
-	Super::BeginPlay();
 	BoxComponent->OnComponentHit.AddDynamic(this, &ASpaceShipBase::OnCollide);
 
 	DodgeComponent = GetComponentByClass<UDodgeComponent>();
@@ -68,6 +67,8 @@ void ASpaceShipBase::BeginPlay()
 	AlarmSpawnedSound = GetComponentByClass<UAudioComponent>();
 	AlarmSpawnedSound->Sound = RocketAlarmSound;
 	AlarmSpawnedSound->Stop();
+
+	Super::BeginPlay();
 }
 
 void ASpaceShipBase::OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor,

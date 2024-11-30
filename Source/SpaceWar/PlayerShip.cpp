@@ -46,8 +46,6 @@ APlayerShip::APlayerShip()
 // Called when the game starts or when spawned
 void APlayerShip::BeginPlay()
 {
-	Super::BeginPlay();
-
 	PlayerController = Cast<APlayerController>(Controller);
 
 	if (PlayerController)
@@ -62,6 +60,8 @@ void APlayerShip::BeginPlay()
 	HealthComponent->OnGetDamage.AddDynamic(this, &APlayerShip::PerformDamageCameraShake);
 
 	SetBlasterGun();
+	
+	Super::BeginPlay();
 }
 
 void APlayerShip::ChangeSpeed(const FInputActionValue& Value)

@@ -7,6 +7,7 @@
 #include "PlayerInventory.generated.h"
 
 
+class ASpaceGameMode;
 class UItemDataAsset;
 class ASpaceShipBase;
 class APlayerItemClass;
@@ -27,7 +28,8 @@ protected:
 public:
 	UPROPERTY(EditAnywhere)
 	USoundBase* ItemAddedSound;
-	
+
+	void InitializeInventory();
 	void AddItem(UItemDataAsset* Item);
 	void RemoveItem(UItemDataAsset* Item);
 	void RemoveRandomItem();
@@ -45,8 +47,7 @@ public:
 
 private:
 	UPROPERTY()
-	TArray<UItemDataAsset*> PlayerItems;
-
+	ASpaceGameMode* GameMode; 
 	UPROPERTY()
 	ASpaceShipBase* SpaceShip;
 };

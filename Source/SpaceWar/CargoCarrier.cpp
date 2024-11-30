@@ -4,6 +4,7 @@
 #include "CargoCarrier.h"
 #include "HealthComponent.h"
 #include "PlayerInventory.h"
+#include "SpaceGameInstance.h"
 #include "SpaceGameMode.h"
 #include "WorldDifficulty.h"
 #include "Components/BoxComponent.h"
@@ -30,10 +31,10 @@ void ACargoCarrier::BeginPlay()
 	Inventory = UGameplayStatics::GetPlayerPawn(this, 0)
 		->GetComponentByClass<UPlayerInventory>();
 
-	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->
+	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
 		GetCurrentUpgrade();
 
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.AddDynamic(
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
 		this, &ACargoCarrier::Upgrade);
 }
 
@@ -52,7 +53,7 @@ void ACargoCarrier::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ACargoCarrier::HandleDeath()
 {
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetWorldDifficulty()->OnUpgraded.RemoveDynamic(
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
 		this, &ACargoCarrier::Upgrade);
 	GetReward();
 	Destroy();

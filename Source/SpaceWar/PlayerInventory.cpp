@@ -4,6 +4,8 @@
 #include "PlayerInventory.h"
 
 #include "ItemDataAsset.h"
+#include "SpaceGameInstance.h"
+#include "SpaceGameMode.h"
 #include "SpaceShipBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -24,6 +26,8 @@ void UPlayerInventory::BeginPlay()
 	Super::BeginPlay();
 
 	SpaceShip = Cast<ASpaceShipBase>(GetOwner());
+	GameMode = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(this));
+	InitializeInventory();
 
 	if (!SpaceShip)
 		UE_LOG(LogTemp, Error, TEXT("NO SPACE SHIP!!"));
@@ -31,9 +35,18 @@ void UPlayerInventory::BeginPlay()
 }
 
 
+void UPlayerInventory::InitializeInventory()
+{
+	for (auto Element : GameMode->GetGameInstance()->PlayerItems)
+	{
+		Element->PickUp(SpaceShip->PlayerStats);
+		OnItemAdded.Broadcast(Element);
+	}
+}
+
 void UPlayerInventory::AddItem(UItemDataAsset* Item)
 {
-	PlayerItems.Add(Item);
+	GameMode->GetGameInstance()->PlayerItems.Add(Item);
 	Item->PickUp(SpaceShip->PlayerStats);
 	OnItemAdded.Broadcast(Item);
 	UGameplayStatics::SpawnSound2D(this, ItemAddedSound);
@@ -41,7 +54,7 @@ void UPlayerInventory::AddItem(UItemDataAsset* Item)
 
 void UPlayerInventory::RemoveItem(UItemDataAsset* Item)
 {
-	PlayerItems.Remove(Item);
+	GameMode->GetGameInstance()->PlayerItems.Remove(Item);
 	Item->Remove(SpaceShip->PlayerStats);
 	OnItemRemoved.Broadcast(Item);
 }
@@ -53,18 +66,18 @@ void UPlayerInventory::RemoveRandomItem()
 
 void UPlayerInventory::RemoveAllItems()
 {
-	for (auto Element : PlayerItems)
+	for (auto Element : GameMode->GetGameInstance()->PlayerItems)
 	{
 		Element->Remove(SpaceShip->PlayerStats);
 		OnItemRemoved.Broadcast(Element);
-		PlayerItems.Remove(Element);
+		GameMode->GetGameInstance()->PlayerItems.Remove(Element);
 	}
 }
 
 int UPlayerInventory::ItemCount(const UItemDataAsset* Item)
 {
 	int count = 0;
-	for (const UItemDataAsset* Element : PlayerItems)
+	for (const UItemDataAsset* Element : GameMode->GetGameInstance()->PlayerItems)
 	{
 		if (Element == Item) ++count;
 	}

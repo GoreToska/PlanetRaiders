@@ -4,13 +4,14 @@
 #include "SpaceGameMode.h"
 
 #include "BossBase.h"
+#include "SpaceGameInstance.h"
 #include "TaskBase.h"
 #include "WorldDifficulty.h"
 #include "Kismet/GameplayStatics.h"
 
-AWorldDifficulty* ASpaceGameMode::GetWorldDifficulty()
+USpaceGameInstance* ASpaceGameMode::GetGameInstance()
 {
-	return WorldDifficulty;
+	return GameInstance;
 }
 
 ABossBase* ASpaceGameMode::SpawnBoss(FTransform Transform)
@@ -28,14 +29,8 @@ ABossBase* ASpaceGameMode::SpawnBoss(FTransform Transform)
 
 void ASpaceGameMode::BeginPlay()
 {
-	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	FVector Location = FVector::Zero();
-	FRotator Rotation = FRotator::ZeroRotator;
-
-	WorldDifficulty = GetWorld()->
-		SpawnActor<AWorldDifficulty>(WorldDifficultyObject, Location, Rotation, SpawnInfo);
-
+	GameInstance = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance->StartTimer();
 	TArray<AActor*> actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATaskBase::StaticClass(), actors);
 
@@ -50,6 +45,18 @@ void ASpaceGameMode::BeginPlay()
 	}
 
 	Super::BeginPlay();
+}
+
+void ASpaceGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (EndPlayReason == EEndPlayReason::Type::Quit ||
+		EndPlayReason == EEndPlayReason::Type::LevelTransition ||
+		EndPlayReason == EEndPlayReason::Type::EndPlayInEditor)
+	{
+		GameInstance->StopTimer();
+	}
 }
 
 void ASpaceGameMode::OnTaskCompleted(ATaskBase* Task)

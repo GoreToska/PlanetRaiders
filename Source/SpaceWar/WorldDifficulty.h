@@ -48,9 +48,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	int TimeToUpgrade = 60;
 
-	int CurrentUpgrade;
-
 public:
+	int CurrentUpgrade;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };
