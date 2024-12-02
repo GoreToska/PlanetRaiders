@@ -3,6 +3,9 @@
 
 #include "TaskBase.h"
 
+#include "Indicator.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ATaskBase::ATaskBase()
 {
@@ -19,6 +22,7 @@ void ATaskBase::CompleteTask()
 // Called when the game starts or when spawned
 void ATaskBase::BeginPlay()
 {
+	TaskIndicator = GetWorld()->SpawnActor<AIndicator>(Indicator, GetActorLocation(), GetActorRotation());
 	Super::BeginPlay();
 }
 

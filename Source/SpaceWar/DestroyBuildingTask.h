@@ -6,6 +6,7 @@
 #include "TaskBase.h"
 #include "DestroyBuildingTask.generated.h"
 
+class AIndicator;
 class AEnemyHouse;
 /**
  * 
@@ -18,10 +19,13 @@ class SPACEWAR_API ADestroyBuildingTask : public ATaskBase
 public:
 	UPROPERTY(EditInstanceOnly)
 	TArray<AEnemyHouse*> EnemyBuildings;
-
+	UPROPERTY()
+	TMap<AEnemyHouse*, AIndicator*> BuildingsAndIndicators;
 	virtual void BeginPlay() override;
 
 protected:
 	UFUNCTION()
-	void OnBuildingDestroyed(AEnemyHouse* Building );
+	void OnBuildingDestroyed(AEnemyHouse* Building);
+
+	virtual void Tick(float DeltaSeconds) override;
 };

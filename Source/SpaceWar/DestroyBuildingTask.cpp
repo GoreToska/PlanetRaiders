@@ -4,6 +4,8 @@
 #include "DestroyBuildingTask.h"
 
 #include "EnemyHouse.h"
+#include "Indicator.h"
+#include "Kismet/GameplayStatics.h"
 
 void ADestroyBuildingTask::BeginPlay()
 {
@@ -21,10 +23,12 @@ void ADestroyBuildingTask::BeginPlay()
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		AActor* indicator = GetWorld()->SpawnActor<AActor>(Indicator, Building->GetActorLocation(),
-		                                                   Building->GetActorRotation(), SpawnInfo);
+		AIndicator* indicator = GetWorld()->SpawnActor<AIndicator>(Indicator, Building->GetActorLocation(),
+		                                                           Building->GetActorRotation(), SpawnInfo);
 
 		indicator->AttachToActor(Building, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		BuildingsAndIndicators.Add(Building, indicator);
 	}
 }
 
@@ -36,11 +40,40 @@ void ADestroyBuildingTask::OnBuildingDestroyed(AEnemyHouse* Building)
 	{
 		OutActor->Destroy();
 	}
-	
-	EnemyBuildings.Remove(Building);
 
-	if (EnemyBuildings.Num() > 0)
+	//EnemyBuildings.Remove(Building);
+	BuildingsAndIndicators.Remove(Building);
+
+	if (BuildingsAndIndicators.Num() > 0)
 		return;
 
 	CompleteTask();
+}
+
+void ADestroyBuildingTask::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (FVector::Distance(GetActorLocation(), UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation())
+		< Distance && !IsObjectsVisible)
+	{
+		for (auto Element : BuildingsAndIndicators)
+		{
+			Element.Value->SetVisibility(true);
+		}
+
+		TaskIndicator->SetVisibility(false);
+		IsObjectsVisible = true;
+	}
+	else if (FVector::Distance(GetActorLocation(), UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation())
+		> Distance && IsObjectsVisible)
+	{
+		for (auto Element : BuildingsAndIndicators)
+		{
+			Element.Value->SetVisibility(false);
+		}
+
+		TaskIndicator->SetVisibility(true);
+		IsObjectsVisible = false;
+	}
 }
