@@ -8,6 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
+#include "SpaceGameInstance.h"
+#include "SpaceGameMode.h"
 
 // Sets default values
 ABossBase::ABossBase()
@@ -20,6 +22,8 @@ ABossBase::ABossBase()
 
 void ABossBase::HandleDeath()
 {
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
+		this, &ABossBase::Upgrade);
 	OnDestroy.Broadcast();
 	Destroy();
 }
@@ -64,10 +68,23 @@ void ABossBase::TeleportToPlayer()
 	                                0.1, false, RotationTime);
 }
 
+void ABossBase::Upgrade(int Value)
+{
+	CurrentUpgrade = Value;
+	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
+}
+
 // Called when the game starts or when spawned
 void ABossBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
+		GetCurrentUpgrade();
+	Upgrade(CurrentUpgrade);
+	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
+		this, &ABossBase::Upgrade);
+
 	TArray<AActor*> ChildActors;
 	GetAllChildActors(ChildActors);
 

@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceGameMode.generated.h"
 
+class ACargoCarrier;
+class ACarrierSpawnPoint;
 class USpaceGameInstance;
 class ATaskBase;
 class ABossBase;
@@ -19,6 +21,8 @@ class SPACEWAR_API ASpaceGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
+	int GetCurrentUpgrade();
 	UFUNCTION(BlueprintCallable)
 	USpaceGameInstance* GetGameInstance();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -28,7 +32,9 @@ public:
 	ABossBase* SpawnBoss(FTransform Transform);
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBossSpawned);
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTasksCompleted);
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTaskCompleted, ATaskBase*, value);
 
 	UPROPERTY(BlueprintAssignable)
@@ -37,12 +43,22 @@ public:
 	FBossSpawned OnAllTasksCompleted;
 	UPROPERTY(BlueprintAssignable)
 	FTaskCompleted OnTaskComplete;
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	TArray<ATaskBase*> Tasks;
 
+	UPROPERTY()
+	TArray<ACarrierSpawnPoint*> CarrierSpawnPoints;
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<ACargoCarrier>> Carriers;
+
 	UPROPERTY(BlueprintReadOnly)
 	USpaceGameInstance* GameInstance;
+
+	UPROPERTY(EditAnywhere)
+	float TimeToSpawnCarrier = 40;
+
+	FTimerHandle CarrierSpawnTimer;
 
 protected:
 	virtual void BeginPlay() override;
@@ -50,4 +66,6 @@ protected:
 
 	UFUNCTION()
 	void OnTaskCompleted(ATaskBase* Task);
+
+	void SpawnCarrier();
 };

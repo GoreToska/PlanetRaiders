@@ -4,7 +4,10 @@
 #include "EnemyHouse.h"
 
 #include "HealthComponent.h"
+#include "SpaceGameInstance.h"
+#include "SpaceGameMode.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyHouse::AEnemyHouse()
@@ -21,10 +24,21 @@ AEnemyHouse::AEnemyHouse()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 }
 
+void AEnemyHouse::Upgrade(int Value)
+{
+	CurrentUpgrade = Value;
+	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
+}
+
 // Called when the game starts or when spawned
 void AEnemyHouse::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GetCurrentUpgrade();
+	Upgrade(CurrentUpgrade);
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->OnUpgraded.AddDynamic(
+		this, &AEnemyHouse::Upgrade);
 }
 
 // Called every frame
@@ -35,6 +49,8 @@ void AEnemyHouse::Tick(float DeltaTime)
 
 void AEnemyHouse::HandleDeath()
 {
+	//Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
+	//	this, &AEnemyHouse::Upgrade);
 	OnBuildingDestroyed.Broadcast(this);
 	Destroy();
 }

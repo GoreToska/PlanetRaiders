@@ -33,7 +33,7 @@ void ACargoCarrier::BeginPlay()
 
 	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
 		GetCurrentUpgrade();
-
+	Upgrade(CurrentUpgrade);
 	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
 		this, &ACargoCarrier::Upgrade);
 }

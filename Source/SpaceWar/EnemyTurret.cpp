@@ -50,7 +50,7 @@ void AEnemyTurret::BeginPlay()
 
 	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
 		GetCurrentUpgrade();
-
+	Upgrade(CurrentUpgrade);
 	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
 		this, &AEnemyTurret::Upgrade);
 }
@@ -69,6 +69,20 @@ void AEnemyTurret::Upgrade(int Upgrade)
 	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
 }
 
+bool AEnemyTurret::IsClearSite()
+{
+	FVector Start = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 100;
+	FVector End = Start + TurretHead->GetForwardVector() * AttackDistance;
+	TArray<AActor*> ActorToIgnore = {this, PlayerShip};
+
+	FCollisionQueryParams CollisionQueryParams = {FName(TEXT("TraceTag")), false, this};
+	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionQueryParams);
+
+	if (Cast<APlayerShip>(HitResult.GetActor())) return true;
+
+	return false;
+}
+
 // Called every frame
 void AEnemyTurret::Tick(float DeltaTime)
 {
@@ -83,7 +97,7 @@ void AEnemyTurret::Tick(float DeltaTime)
 	if (GetWorld()->GetTimerManager().IsTimerActive(BurstTimerHandle))
 		return;
 
-	if (!CheckDistanceToPlayer())
+	if (!CheckDistanceToPlayer() || !IsClearSite())
 		return;
 
 	FireShot();

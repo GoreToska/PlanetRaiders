@@ -38,7 +38,7 @@ public:
 	void NewGame();
 
 	UFUNCTION(BlueprintCallable)
-	int GetCurrentUpgrade();
+	int GetCurrentUpgrade() const;
 
 	UPROPERTY()
 	FTimerHandle WorldTimer;
@@ -48,7 +48,7 @@ public:
 
 	UPROPERTY()
 	TArray<UItemDataAsset*> PlayerItems;
-	
+
 protected:
-	int CurrentUpgrade;
+	int CurrentUpgrade = 1;
 };

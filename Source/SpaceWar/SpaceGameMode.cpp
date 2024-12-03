@@ -4,10 +4,17 @@
 #include "SpaceGameMode.h"
 
 #include "BossBase.h"
+#include "CargoCarrier.h"
+#include "CarrierSpawnPoint.h"
 #include "SpaceGameInstance.h"
 #include "TaskBase.h"
 #include "WorldDifficulty.h"
 #include "Kismet/GameplayStatics.h"
+
+int ASpaceGameMode::GetCurrentUpgrade()
+{
+	return GameInstance->GetCurrentUpgrade();
+}
 
 USpaceGameInstance* ASpaceGameMode::GetGameInstance()
 {
@@ -31,9 +38,9 @@ void ASpaceGameMode::BeginPlay()
 {
 	GameInstance = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	GameInstance->StartTimer();
+
 	TArray<AActor*> actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATaskBase::StaticClass(), actors);
-
 	for (auto Actor : actors)
 	{
 		ATaskBase* task = Cast<ATaskBase>(Actor);
@@ -43,6 +50,16 @@ void ASpaceGameMode::BeginPlay()
 			task->OnCompleted.AddDynamic(this, &ASpaceGameMode::OnTaskCompleted);
 		}
 	}
+
+	actors.Empty();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACarrierSpawnPoint::StaticClass(), actors);
+	for (auto Actor : actors)
+	{
+		CarrierSpawnPoints.Add(Cast<ACarrierSpawnPoint>(Actor));
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(CarrierSpawnTimer, this, &ASpaceGameMode::SpawnCarrier, TimeToSpawnCarrier,
+	                                       true);
 
 	Super::BeginPlay();
 }
@@ -68,4 +85,20 @@ void ASpaceGameMode::OnTaskCompleted(ATaskBase* Task)
 	{
 		OnAllTasksCompleted.Broadcast();
 	}
+}
+
+void ASpaceGameMode::SpawnCarrier()
+{
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	int randomCarrier = FMath::RandRange(0, Carriers.Num() - 1);
+	int randomPoint = FMath::RandRange(0, CarrierSpawnPoints.Num() - 1);
+
+	ACargoCarrier* cargo = GetWorld()->SpawnActor<ACargoCarrier>(Carriers[randomCarrier],
+	                                                             CarrierSpawnPoints[randomPoint]->GetActorLocation(),
+	                                                             CarrierSpawnPoints[randomPoint]->GetActorRotation(),
+	                                                             SpawnInfo);
+
+	UE_LOG(LogTemp, Display, TEXT("Spawned"));
 }

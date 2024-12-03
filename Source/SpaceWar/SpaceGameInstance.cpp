@@ -27,7 +27,7 @@ void USpaceGameInstance::StopTimer()
 		GetWorld()->GetTimerManager().ClearTimer(WorldTimer);
 }
 
-int USpaceGameInstance::GetCurrentUpgrade()
+int USpaceGameInstance::GetCurrentUpgrade() const
 {
 	return CurrentUpgrade;
 }

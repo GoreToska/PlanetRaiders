@@ -23,8 +23,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDestroyed OnBuildingDestroyed;
+	int CurrentUpgrade = 1;
+	UPROPERTY(EditAnywhere)
+	float IncreaseExponent = 0.2;
 
 protected:
+	UFUNCTION()
+	void Upgrade(int Value);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

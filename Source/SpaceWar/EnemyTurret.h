@@ -89,6 +89,10 @@ protected:
 	UFUNCTION()
 	void Upgrade(int Upgrade);
 
+	FHitResult HitResult;
+
+	bool IsClearSite();
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
