@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
 
+class UNiagaraSystem;
 class UBoxComponent;
 class UProjectileMovementComponent;
 
@@ -33,23 +34,19 @@ protected:
 	virtual void DestroyProjectile();
 	virtual void StartProjectileTimer();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	FTimerHandle DestructionTimer;
 	UPROPERTY(EditAnywhere)
 	float TimeToLive = 5.f;
-	//UPROPERTY(EditAnywhere)
-	//UParticleSystem* DestroyParticles;
-
+	
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 	UPROPERTY(EditAnywhere)
 	USceneComponent* SceneComponent;
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
-	//UPROPERTY(EditAnywhere)
-	//UParticleSystemComponent* ParticleSystemComponent;
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* HitEffect;
+	UNiagaraSystem* HitEffect;
 	UPROPERTY(EditAnywhere)
 	FVector HitEffectScale = FVector(1, 1, 1);
 	UPROPERTY(EditAnywhere)
@@ -58,7 +55,7 @@ protected:
 	USoundBase* LoopSound;
 	UPROPERTY(EditAnywhere)
 	float SplashRadius = 0;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	UAudioComponent* SpawnedAudioLoop;
 	UPROPERTY()
 	AActor* HitActor = nullptr;

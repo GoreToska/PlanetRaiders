@@ -3,6 +3,7 @@
 
 #include "ProjectileBase.h"
 #include "HealthComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -16,6 +17,7 @@ AProjectileBase::AProjectileBase()
 	PrimaryActorTick.bCanEverTick = false;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	SpawnedAudioLoop = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioLoop"));
 	BoxComponent->SetupAttachment(SceneComponent);
 	BoxComponent->SetCollisionProfileName(TEXT("BlockAllDinamics"));
 	SetRootComponent(BoxComponent);
@@ -51,7 +53,9 @@ void AProjectileBase::BeginPlay()
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnBeginOverlap);
 
 	if (LoopSound)
-		SpawnedAudioLoop = UGameplayStatics::SpawnSoundAttached(LoopSound, GetRootComponent());
+	{
+		//SpawnedAudioLoop->Play();
+	}
 
 	StartProjectileTimer();
 }
@@ -59,8 +63,7 @@ void AProjectileBase::BeginPlay()
 void AProjectileBase::CreateSoundAndFX()
 {
 	if (HitEffect)
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorLocation(), FRotator::ZeroRotator,
-		                                         HitEffectScale);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), HitEffect, GetActorLocation());
 
 	if (HitSound)
 		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), HitSound, GetActorLocation());
