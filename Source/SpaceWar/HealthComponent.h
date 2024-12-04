@@ -8,6 +8,8 @@
 #include "HealthComponent.generated.h"
 
 
+class UNiagaraSystem;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SPACEWAR_API UHealthComponent : public UActorComponent
 {
@@ -17,7 +19,7 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float CurrentHP = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -50,7 +52,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* DeathParticles;
+	UNiagaraSystem* DeathParticles;
 	UPROPERTY(EditAnywhere)
 	FVector DeathParticleScale = FVector(10, 10, 10);
 

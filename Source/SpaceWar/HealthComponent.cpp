@@ -3,6 +3,7 @@
 
 #include "HealthComponent.h"
 
+#include "NiagaraFunctionLibrary.h"
 #include "PlayerShip.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -56,8 +57,9 @@ void UHealthComponent::Death()
 
 void UHealthComponent::DestroyEffect()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticles, GetOwner()->GetActorLocation(),
-	                                         GetOwner()->GetActorRotation(), DeathParticleScale);
+	UNiagaraComponent* system = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), DeathParticles, GetOwner()->GetActorLocation(),
+	                                               GetOwner()->GetActorRotation());
+	
 }
 
 void UHealthComponent::SetNewMaxHealth(float health)

@@ -57,11 +57,10 @@ void APlayerShip::BeginPlay()
 		}
 	}
 
-	HealthComponent->OnGetDamage.AddDynamic(this, &APlayerShip::PerformDamageCameraShake);
 
-	SetBlasterGun();
-	
 	Super::BeginPlay();
+	HealthComponent->OnGetDamage.AddDynamic(this, &APlayerShip::PerformDamageCameraShake);
+	SetBlasterGun();
 }
 
 void APlayerShip::ChangeSpeed(const FInputActionValue& Value)

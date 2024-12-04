@@ -26,7 +26,7 @@ ASpaceShipBase::ASpaceShipBase()
 	BoxComponent->SetSimulatePhysics(false);
 	BoxComponent->SetEnableGravity(false);
 
-	HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
+	//HealthComponent = CreateDefaultSubobject<URegeneratableHealthComponent>(TEXT("Health Component"));
 	PlayerStats = CreateDefaultSubobject<UPlayerStats>(TEXT("Statistics Component"));
 }
 
@@ -60,14 +60,15 @@ int ASpaceShipBase::RocketsFollowedCount()
 // Called when the game starts or when spawned
 void ASpaceShipBase::BeginPlay()
 {
-	BoxComponent->OnComponentHit.AddDynamic(this, &ASpaceShipBase::OnCollide);
-
 	DodgeComponent = GetComponentByClass<UDodgeComponent>();
 	MovementComponent = GetComponentByClass<USpaceShipMovementComponent>();
 	AlarmSpawnedSound = GetComponentByClass<UAudioComponent>();
+	HealthComponent = GetComponentByClass<URegeneratableHealthComponent>();
 	AlarmSpawnedSound->Sound = RocketAlarmSound;
 	AlarmSpawnedSound->Stop();
-
+	
+	BoxComponent->OnComponentHit.AddDynamic(this, &ASpaceShipBase::OnCollide);
+	
 	Super::BeginPlay();
 }
 
