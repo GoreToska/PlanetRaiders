@@ -60,29 +60,40 @@ void UGunSceneComponent::PerformShot()
 
 
 	bool IsLoading = GetWorld()->GetTimerManager().IsTimerActive(LoadingTimerHandle);
+
 	if (IsLoading)
 		return;
+
 
 	GetWorld()->GetTimerManager()
 	          .SetTimer(LoadingTimerHandle,
 	                    this,
 	                    &UGunSceneComponent::LoadAmmo,
-	                    TimeToLoadAmmo,
+	                    0.02,
 	                    true);
 }
 
 void UGunSceneComponent::LoadAmmo()
 {
+	if (CurrentAmmo >= MaxAmmo) return;
+
+	LoadingTimePassed += 0.02;
+	UE_LOG(LogTemp, Display, TEXT("%f"), LoadingTimePassed);
+
+	if (LoadingTimePassed < TimeToLoadAmmo)
+		return;
+
+	LoadingTimePassed = 0;
+
 	if (CurrentAmmo < MaxAmmo)
 	{
 		++CurrentAmmo;
 		OnBulletCountChanged.Broadcast(CurrentAmmo);
-		UE_LOG(LogTemp, Warning, TEXT("%d"), CurrentAmmo);
+
+		return;
 	}
-	else
-	{
-		GetWorld()->GetTimerManager().ClearTimer(LoadingTimerHandle);
-	}
+
+	GetWorld()->GetTimerManager().ClearTimer(LoadingTimerHandle);
 }
 
 void UGunSceneComponent::SpendAmmo()
@@ -128,6 +139,7 @@ void UGunSceneComponent::BeginPlay()
 
 	PlayerStats = GetOwner()->GetComponentByClass<UPlayerStats>();
 	CurrentAmmo = MaxAmmo;
+	LoadingTimePassed = 0;
 }
 
 void UGunSceneComponent::OnShotFired()

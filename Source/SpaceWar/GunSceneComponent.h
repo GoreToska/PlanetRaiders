@@ -45,10 +45,13 @@ public:
 	float FireSpeedPerSec = 100;
 	UPROPERTY(EditAnywhere)
 	float Distance = 1000;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int MaxAmmo = 40;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float TimeToLoadAmmo = 0.5;
+	UPROPERTY(BlueprintReadOnly)
+	float LoadingTimePassed = 0;
+	UPROPERTY(BlueprintReadOnly)
 	int CurrentAmmo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTexture2D* CrosshairTexture;

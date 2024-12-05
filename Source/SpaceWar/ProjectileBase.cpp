@@ -54,7 +54,8 @@ void AProjectileBase::BeginPlay()
 
 	if (LoopSound)
 	{
-		//SpawnedAudioLoop->Play();
+		SpawnedAudioLoop->AttachToComponent(GetRootComponent(),
+		                                    FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 
 	StartProjectileTimer();
