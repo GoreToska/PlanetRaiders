@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceGameMode.generated.h"
 
+class UItemDataAsset;
 class ACargoCarrier;
 class ACarrierSpawnPoint;
 class USpaceGameInstance;
@@ -21,6 +22,10 @@ class SPACEWAR_API ASpaceGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
+	UItemDataAsset* GetRandomItem();
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<TSubclassOf<UItemDataAsset>> ItemsOnLevel;
 	UFUNCTION()
 	int GetCurrentUpgrade();
 	UFUNCTION(BlueprintCallable)

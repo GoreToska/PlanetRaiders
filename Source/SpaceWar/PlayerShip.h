@@ -32,6 +32,11 @@ public:
 	UFUNCTION()
 	void UpdateStats();
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDead OnDeath;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,13 +47,13 @@ protected:
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* CameraComponent;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	UPlayerInventory* PlayerInventory;
 	UPROPERTY(EditAnywhere)
 	USoundBase* AimSound;
 	UPROPERTY(EditAnywhere)
 	USoundBase* FlareSound;
-	
+
 	UPROPERTY(EditAnywhere)
 	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)
@@ -92,7 +97,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float AimDistance = 20000;
 	bool BIsAiming = false;
-	
+
 	float CurrentCameraFOV = StandardFOV;
 
 	UPROPERTY(EditAnywhere)

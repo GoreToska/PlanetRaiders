@@ -30,7 +30,7 @@ APlayerShip::APlayerShip()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
-	PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Player Inventory"));
+	//PlayerInventory = CreateDefaultSubobject<UPlayerInventory>(TEXT("Player Inventory"));
 
 	SpringArmComponent->bEnableCameraRotationLag = true;
 	SpringArmComponent->CameraRotationLagSpeed = 7.f;
@@ -47,7 +47,7 @@ APlayerShip::APlayerShip()
 void APlayerShip::BeginPlay()
 {
 	PlayerController = Cast<APlayerController>(Controller);
-
+	PlayerInventory = GetComponentByClass<UPlayerInventory>();
 	if (PlayerController)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
@@ -225,6 +225,7 @@ void APlayerShip::HandleDeath()
 	MovementComponent->CurrentSpeed = 0;
 	MovementComponent->CurrentRotateInput = 0;
 	MovementComponent->CurrentTurnInput = FVector::Zero();
+	OnDeath.Broadcast();
 }
 
 float APlayerShip::GetCurrentSpeed()

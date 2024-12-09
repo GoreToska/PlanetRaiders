@@ -30,8 +30,11 @@ public:
 	USoundBase* ItemAddedSound;
 
 	void InitializeInventory();
+	UFUNCTION(BlueprintCallable)
 	void AddItem(UItemDataAsset* Item);
+	UFUNCTION(BlueprintCallable)
 	void RemoveItem(UItemDataAsset* Item);
+	UFUNCTION(BlueprintCallable)
 	void RemoveRandomItem();
 	void RemoveAllItems();
 

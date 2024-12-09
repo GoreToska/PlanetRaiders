@@ -11,6 +11,13 @@
 #include "WorldDifficulty.h"
 #include "Kismet/GameplayStatics.h"
 
+UItemDataAsset* ASpaceGameMode::GetRandomItem()
+{
+	int randomInt = FMath::RandRange(0, ItemsOnLevel.Num() - 1);
+
+	return ItemsOnLevel[randomInt].GetDefaultObject();
+}
+
 int ASpaceGameMode::GetCurrentUpgrade()
 {
 	return GameInstance->GetCurrentUpgrade();
