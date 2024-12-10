@@ -17,7 +17,6 @@ int USpaceGameInstance::GetMinutes()
 
 void USpaceGameInstance::StartTimer()
 {
-	UE_LOG(LogTemp, Display, TEXT("StartedTimer"));
 	GetWorld()->GetTimerManager().SetTimer(WorldTimer, this, &USpaceGameInstance::OnTimerTick, 1, true);
 }
 
@@ -46,6 +45,7 @@ void USpaceGameInstance::OnTimerTick()
 
 void USpaceGameInstance::NewGame()
 {
+	PlayerItems.Empty();
 	CurrentTime = 0;
 	CurrentUpgrade = 1;
 }

@@ -48,10 +48,9 @@ void AEnemyTurret::BeginPlay()
 	HealthComponent = GetComponentByClass<UHealthComponent>();
 	PlayerShip = Cast<APlayerShip>(UGameplayStatics::GetPlayerPawn(this, 0));
 
-	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
-		GetCurrentUpgrade();
+	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(this))->GetCurrentUpgrade();
 	Upgrade(CurrentUpgrade);
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(this))->OnUpgraded.AddDynamic(
 		this, &AEnemyTurret::Upgrade);
 }
 
@@ -134,7 +133,7 @@ void AEnemyTurret::FireShot()
 
 void AEnemyTurret::HandleDeath()
 {
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(this))->OnUpgraded.RemoveDynamic(
 		this, &AEnemyTurret::Upgrade);
 
 	Destroy();

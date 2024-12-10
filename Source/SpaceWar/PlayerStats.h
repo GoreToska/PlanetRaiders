@@ -33,7 +33,7 @@ public:
 	void ChangeFireRate(float Exponent);
 	void ChangeFlareCooldown(float Exponent);
 
-	float const IncreaseExponent = 1.2;
+	float const IncreaseExponent = 1.05;
 	float const DecreaseExponent = 0.8;
 
 	float DamageModifier = 1;
