@@ -24,7 +24,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void HandleHit() override;
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void DestroyProjectile() override;
+	FTimerHandle IsPlayerInFrontTimer;
 	
 private:
 	UPROPERTY()

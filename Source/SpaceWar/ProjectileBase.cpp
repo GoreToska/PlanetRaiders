@@ -14,7 +14,7 @@
 AProjectileBase::AProjectileBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 	SpawnedAudioLoop = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioLoop"));

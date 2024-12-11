@@ -56,10 +56,12 @@ void AEnemyTurret::BeginPlay()
 
 void AEnemyTurret::RotateTowardsPlayer()
 {
+	float Distance = FVector::Distance(TurretHeadSocket->GetComponentLocation(), PlayerShip->GetActorLocation());
+	FVector PlayerLocation = PlayerShip->GetActorLocation() + PlayerShip->GetActorForwardVector() * Distance /
+		PredictDistance;
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(TurretHeadSocket->GetComponentLocation(),
-	                                                                 PlayerShip->GetActorLocation());
-	if (PlayerShip)
-		TurretHeadSocket->SetWorldRotation(LookAtRotation);
+	                                                                 PlayerLocation);
+	TurretHeadSocket->SetWorldRotation(LookAtRotation);
 }
 
 void AEnemyTurret::Upgrade(int Upgrade)
@@ -77,8 +79,13 @@ bool AEnemyTurret::IsClearSite()
 	FCollisionQueryParams CollisionQueryParams = {FName(TEXT("TraceTag")), false, this};
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionQueryParams);
 
-	if (Cast<APlayerShip>(HitResult.GetActor())) return true;
+	if (Cast<APlayerShip>(HitResult.GetActor()) || !HitResult.IsValidBlockingHit())
+	{
+		UE_LOG(LogTemp, Display, TEXT("Clear"));
+		return true;
+	}
 
+	UE_LOG(LogTemp, Display, TEXT("Not Clear"));
 	return false;
 }
 

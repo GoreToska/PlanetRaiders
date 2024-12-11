@@ -15,6 +15,16 @@ void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
 
 	PlayerShip->OnUsedFlare.AddDynamic(this, &AHomingProjectile::ClearProjectileHomingTarget);
 	PlayerShip->AddHomingRocket(this);
+	GetWorld()->GetTimerManager().SetTimer(IsPlayerInFrontTimer,
+	                                       FTimerDelegate::CreateLambda([this]
+	                                       {
+		                                       if (FVector::DotProduct(GetActorForwardVector(),
+		                                                               (GetActorLocation() - PlayerShip->
+			                                                               GetActorLocation()).GetSafeNormal()) > 0)
+		                                       {
+			                                       ClearProjectileHomingTarget();
+		                                       }
+	                                       }), 0.25, true, 1);
 }
 
 void AHomingProjectile::ClearProjectileHomingTarget()
@@ -42,4 +52,13 @@ void AHomingProjectile::HandleHit()
 
 	UE_LOG(LogTemp, Display, TEXT("this null - %hhd, player null - %hhd"), this == nullptr, PlayerShip == nullptr);
 	Super::HandleHit();
+}
+
+void AHomingProjectile::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"),
+	       FVector::DotProduct(GetActorForwardVector(),(GetActorLocation() - PlayerShip->GetActorLocation()).
+		       GetSafeNormal()));
 }

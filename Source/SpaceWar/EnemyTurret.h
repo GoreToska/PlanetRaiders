@@ -57,6 +57,8 @@ protected:
 	APlayerShip* PlayerShip;
 	UFUNCTION(BlueprintCallable)
 	void RotateTowardsPlayer();
+	UPROPERTY(EditAnywhere)
+	float PredictDistance = 10;
 
 	UPROPERTY(EditAnywhere)
 	float BurstShotsCount = 5;
