@@ -61,6 +61,7 @@ void APlayerShip::BeginPlay()
 	Super::BeginPlay();
 	HealthComponent->OnGetDamage.AddDynamic(this, &APlayerShip::PerformDamageCameraShake);
 	SetBlasterGun();
+	UpdateStats();
 }
 
 void APlayerShip::ChangeSpeed(const FInputActionValue& Value)
@@ -105,7 +106,7 @@ void APlayerShip::UseFlare(const FInputActionValue& Value)
 	if (GetWorld()->GetTimerManager().IsTimerActive(FlareTimerHandle))
 		return;
 
-	GetWorld()->GetTimerManager().SetTimer(FlareTimerHandle, this, &APlayerShip::OnTimerSet, FlareCooldown, false);
+	GetWorld()->GetTimerManager().SetTimer(FlareTimerHandle, this, &APlayerShip::OnFlareTimerSet, 0.02, true);
 
 	UGameplayStatics::SpawnSoundAttached(FlareSound, GetRootComponent());
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FlareParticles, GetTransform());
@@ -137,17 +138,23 @@ void APlayerShip::ChangeCameraFOV(float DeltaTime)
 	                                                AimInterpolation);
 }
 
-void APlayerShip::OnTimerSet()
+void APlayerShip::OnFlareTimerSet()
 {
+	FlareTime += 0.02;
+	if (FlareTime >= FlareCooldown)
+	{
+		GetWorldTimerManager().ClearTimer(FlareTimerHandle);
+		FlareTime = 0;
+	}
 }
 
 void APlayerShip::UpdateStats()
 {
-	MovementComponent->MaxSpeed *= PlayerStats->SpeedModifier;
-	BlasterGun->FireSpeedPerSec *= PlayerStats->FireRateModifier;
-	RocketGun->FireSpeedPerSec *= PlayerStats->FireRateModifier;
-	FlareCooldown /= PlayerStats->FlareCooldownModifier;
-	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * PlayerStats->HealthModifier);
+	MovementComponent->MaxSpeed = PlayerStats->BaseSpeed * PlayerStats->SpeedModifier;
+	BlasterGun->FireSpeedPerSec = PlayerStats->BaseFireRate1 * PlayerStats->FireRateModifier;
+	RocketGun->FireSpeedPerSec = PlayerStats->BaseFireRate2 * PlayerStats->FireRateModifier;
+	FlareCooldown = PlayerStats->BaseFlareCooldown / PlayerStats->FlareCooldownModifier;
+	HealthComponent->SetNewMaxHealth(PlayerStats->BaseHealth * PlayerStats->HealthModifier);
 }
 
 void APlayerShip::OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,

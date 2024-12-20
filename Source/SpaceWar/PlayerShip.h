@@ -86,7 +86,7 @@ protected:
 	void SecondWeapon(const FInputActionValue& Value);
 
 	void ChangeCameraFOV(float DeltaTime);
-	void OnTimerSet();
+	void OnFlareTimerSet();
 
 	UPROPERTY(EditAnywhere)
 	float StandardFOV = 90;
@@ -131,6 +131,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FUsedFlare OnUsedFlare;
+	UPROPERTY(BlueprintReadOnly)
+	float FlareTime = 0;
 
 private:
 	void ClampCurrentSpeed();

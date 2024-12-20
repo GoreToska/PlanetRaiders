@@ -43,13 +43,17 @@ void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
 
 void ASpaceShipBase::RemoveHomingRocket(AHomingProjectile* Projectile)
 {
+	if(!HealthComponent->IsAlive())
+		return;
+	
 	ProjectilesAfterPlayer.Remove(Projectile);
 	OnRocketFollowRemoved.Broadcast();
 
 	if (ProjectilesAfterPlayer.Num() > 0)
 		return;
 
-	AlarmSpawnedSound->Stop();
+	if (AlarmSpawnedSound)
+		AlarmSpawnedSound->Stop();
 }
 
 int ASpaceShipBase::RocketsFollowedCount()
@@ -66,9 +70,9 @@ void ASpaceShipBase::BeginPlay()
 	HealthComponent = GetComponentByClass<URegeneratableHealthComponent>();
 	AlarmSpawnedSound->Sound = RocketAlarmSound;
 	AlarmSpawnedSound->Stop();
-	
+
 	BoxComponent->OnComponentHit.AddDynamic(this, &ASpaceShipBase::OnCollide);
-	
+
 	Super::BeginPlay();
 }
 

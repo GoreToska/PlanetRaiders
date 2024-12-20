@@ -81,11 +81,9 @@ bool AEnemyTurret::IsClearSite()
 
 	if (Cast<APlayerShip>(HitResult.GetActor()) || !HitResult.IsValidBlockingHit())
 	{
-		UE_LOG(LogTemp, Display, TEXT("Clear"));
 		return true;
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("Not Clear"));
 	return false;
 }
 

@@ -9,6 +9,9 @@
 
 void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
 {
+	if (!playerShip)
+		return;
+
 	PlayerShip = playerShip;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
 	ProjectileMovementComponent->HomingTargetComponent = PlayerShip->GetRootComponent();
@@ -29,8 +32,10 @@ void AHomingProjectile::SetProjectileHomingTarget(APlayerShip* playerShip)
 
 void AHomingProjectile::ClearProjectileHomingTarget()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Clear target"));
 	ProjectileMovementComponent->bIsHomingProjectile = false;
 	PlayerShip->RemoveHomingRocket(this);
+	GetWorld()->GetTimerManager().ClearTimer(IsPlayerInFrontTimer);
 }
 
 void AHomingProjectile::DestroyProjectile()
@@ -50,15 +55,10 @@ void AHomingProjectile::HandleHit()
 	if (this)
 		PlayerShip->RemoveHomingRocket(this);
 
-	UE_LOG(LogTemp, Display, TEXT("this null - %hhd, player null - %hhd"), this == nullptr, PlayerShip == nullptr);
 	Super::HandleHit();
 }
 
 void AHomingProjectile::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	UE_LOG(LogTemp, Warning, TEXT("%f"),
-	       FVector::DotProduct(GetActorForwardVector(),(GetActorLocation() - PlayerShip->GetActorLocation()).
-		       GetSafeNormal()));
 }

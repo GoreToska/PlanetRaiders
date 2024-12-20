@@ -26,7 +26,14 @@ public:
 	float DodgeSpeed = 1000;
 	UPROPERTY(EditAnywhere)
 	USoundBase* DodgeSound;
+	UPROPERTY(EditAnywhere)
+	float DodgeDistance = 300;
+	void DodgeRockets();
 
+	UPROPERTY(BlueprintReadOnly)
+	float Cooldown;
+	UPROPERTY(BlueprintReadOnly)
+	float DodgeTime = 0;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -46,7 +53,6 @@ private:
 
 	bool bIsDodging;
 	FVector DodgeSideModifier;
-	float DodgeTime;
 	float PrevDodgeTime = 0;
 	float MinDodgeTime;
 	float MaxDodgeTime;

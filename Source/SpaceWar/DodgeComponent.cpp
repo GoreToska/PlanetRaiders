@@ -3,6 +3,7 @@
 
 #include "DodgeComponent.h"
 
+#include "HomingProjectile.h"
 #include "SpaceShipBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -17,6 +18,41 @@ UDodgeComponent::UDodgeComponent()
 }
 
 
+void UDodgeComponent::DodgeRockets()
+{
+	DrawDebugSphere(GetWorld(),
+	                OwningActor->GetActorLocation(),
+	                DodgeDistance, 32, FColor::Red, false, 10);
+	TArray<AActor*> Actors;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwner());
+	ActorsToIgnore.Add(OwningActor);
+	UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(),
+		OwningActor->GetActorLocation(),
+		DodgeDistance,
+		ObjectTypes,
+		AActor::StaticClass(),
+		ActorsToIgnore,
+		Actors);
+
+	if (Actors.Num() <= 0)
+	{
+		return;
+	}
+
+	for (AActor* a : Actors)
+	{
+		AHomingProjectile* projectile = Cast<AHomingProjectile>(a);
+
+		if (!projectile)
+			return;
+
+		projectile->ClearProjectileHomingTarget();
+	}
+}
+
 // Called when the game starts
 void UDodgeComponent::BeginPlay()
 {
@@ -25,6 +61,7 @@ void UDodgeComponent::BeginPlay()
 	if (DodgeCurve)
 	{
 		DodgeCurve->GetTimeRange(MinDodgeTime, MaxDodgeTime);
+		Cooldown = MaxDodgeTime;
 	}
 	else
 	{
@@ -76,5 +113,6 @@ void UDodgeComponent::PerformDodge(const FVector& InputVector)
 	DodgeSideModifier = InputVector;
 	DodgeSideModifier.Normalize();
 	bIsDodging = true;
+	DodgeRockets();
 	UGameplayStatics::SpawnSoundAttached(DodgeSound, GetOwner()->GetRootComponent());
 }

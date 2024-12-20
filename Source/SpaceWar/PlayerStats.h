@@ -41,4 +41,10 @@ public:
 	float SpeedModifier = 1;
 	float FireRateModifier = 1;
 	float FlareCooldownModifier = 1;
+
+	float BaseHealth = 100;
+	float BaseSpeed = 1500;
+	float BaseFireRate1 = 600;
+	float BaseFireRate2 = 100;
+	float BaseFlareCooldown = 10;
 };

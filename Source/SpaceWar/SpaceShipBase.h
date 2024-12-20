@@ -59,7 +59,9 @@ public:
 	FOnFollowedRocketCountChanged OnRocketFollowAdded;
 	UPROPERTY(BlueprintAssignable)
 	FOnFollowedRocketCountChanged OnRocketFollowRemoved;
-
+	UPROPERTY()
+	TArray<AHomingProjectile*> ProjectilesAfterPlayer;
+	
 	void AddHomingRocket(AHomingProjectile* Projectile);
 	void RemoveHomingRocket(AHomingProjectile* Projectile);
 
@@ -85,13 +87,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float FlareCooldown = 10;
 	UPROPERTY(EditAnywhere)
 	float CollideDamage = 100;
-
-	UPROPERTY()
-	TArray<AHomingProjectile*> ProjectilesAfterPlayer;
 
 	UFUNCTION()
 	virtual void OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
