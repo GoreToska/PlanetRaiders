@@ -92,7 +92,8 @@ void UDodgeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 			bIsDodging = false;
 			DodgeTime = 0;
 			PrevDodgeTime = 0;
-		}
+			return;
+		} 
 
 		float CurveValue = DodgeCurve->GetFloatValue(DodgeTime);
 		float DeltaCurve = CurveValue - PrevDodgeTime;
@@ -100,6 +101,8 @@ void UDodgeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		OwningActor->AddActorLocalOffset(DodgeSideModifier * DodgeSpeed * DeltaTime * DeltaCurve);
 		DodgeTime += DeltaTime;
 	}
+
+	UE_LOG(LogTemp, Display, TEXT("%f"), DodgeTime);
 }
 
 void UDodgeComponent::PerformDodge(const FVector& InputVector)

@@ -31,11 +31,10 @@ void ACargoCarrier::BeginPlay()
 	Inventory = UGameplayStatics::GetPlayerPawn(this, 0)
 		->GetComponentByClass<UPlayerInventory>();
 
-	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
-		GetCurrentUpgrade();
+	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GetCurrentUpgrade();
 	Upgrade(CurrentUpgrade);
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
-		this, &ACargoCarrier::Upgrade);
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->
+		OnUpgraded.AddDynamic(this, &ACargoCarrier::Upgrade);
 }
 
 // Called every frame
@@ -53,8 +52,8 @@ void ACargoCarrier::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ACargoCarrier::HandleDeath()
 {
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
-		this, &ACargoCarrier::Upgrade);
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))
+		->OnUpgraded.RemoveDynamic(this, &ACargoCarrier::Upgrade);
 	GetReward();
 	Destroy();
 }

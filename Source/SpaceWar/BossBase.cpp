@@ -22,7 +22,7 @@ ABossBase::ABossBase()
 
 void ABossBase::HandleDeath()
 {
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.RemoveDynamic(
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->OnUpgraded.RemoveDynamic(
 		this, &ABossBase::Upgrade);
 	OnDestroy.Broadcast();
 	Destroy();
@@ -79,10 +79,9 @@ void ABossBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CurrentUpgrade = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->
-		GetCurrentUpgrade();
+	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GetCurrentUpgrade();
 	Upgrade(CurrentUpgrade);
-	Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->GetGameInstance()->OnUpgraded.AddDynamic(
+	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->OnUpgraded.AddDynamic(
 		this, &ABossBase::Upgrade);
 
 	TArray<AActor*> ChildActors;

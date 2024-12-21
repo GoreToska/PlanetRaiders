@@ -23,10 +23,10 @@ int ASpaceGameMode::GetCurrentUpgrade()
 	return GameInstance->GetCurrentUpgrade();
 }
 
-USpaceGameInstance* ASpaceGameMode::GetGameInstance()
+/*USpaceGameInstance* ASpaceGameMode::GetGameInstance()
 {
 	return GameInstance;
-}
+}*/
 
 ABossBase* ASpaceGameMode::SpawnBoss(FTransform Transform)
 {

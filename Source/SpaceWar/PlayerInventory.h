@@ -7,6 +7,7 @@
 #include "PlayerInventory.generated.h"
 
 
+class USpaceGameInstance;
 class ASpaceGameMode;
 class UItemDataAsset;
 class ASpaceShipBase;
@@ -53,4 +54,6 @@ private:
 	ASpaceGameMode* GameMode; 
 	UPROPERTY()
 	ASpaceShipBase* SpaceShip;
+	UPROPERTY()
+	USpaceGameInstance* GameInstance;
 };

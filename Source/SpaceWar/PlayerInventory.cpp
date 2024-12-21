@@ -27,6 +27,8 @@ void UPlayerInventory::BeginPlay()
 
 	SpaceShip = Cast<ASpaceShipBase>(GetOwner());
 	GameMode = Cast<ASpaceGameMode>(UGameplayStatics::GetGameMode(this));
+	GameInstance = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 	InitializeInventory();
 
 	if (!SpaceShip)
@@ -37,7 +39,7 @@ void UPlayerInventory::BeginPlay()
 
 void UPlayerInventory::InitializeInventory()
 {
-	for (auto Element : GameMode->GetGameInstance()->PlayerItems)
+	for (auto Element : GameInstance->PlayerItems)
 	{
 		Element->PickUp(SpaceShip->PlayerStats);
 		OnItemAdded.Broadcast(Element);
@@ -46,7 +48,7 @@ void UPlayerInventory::InitializeInventory()
 
 void UPlayerInventory::AddItem(UItemDataAsset* Item)
 {
-	GameMode->GetGameInstance()->PlayerItems.Add(Item);
+	GameInstance->PlayerItems.Add(Item);
 	Item->PickUp(SpaceShip->PlayerStats);
 	OnItemAdded.Broadcast(Item);
 	UGameplayStatics::SpawnSound2D(this, ItemAddedSound);
@@ -54,7 +56,7 @@ void UPlayerInventory::AddItem(UItemDataAsset* Item)
 
 void UPlayerInventory::RemoveItem(UItemDataAsset* Item)
 {
-	GameMode->GetGameInstance()->PlayerItems.Remove(Item);
+	GameInstance->PlayerItems.Remove(Item);
 	Item->Remove(SpaceShip->PlayerStats);
 	OnItemRemoved.Broadcast(Item);
 }
@@ -66,18 +68,18 @@ void UPlayerInventory::RemoveRandomItem()
 
 void UPlayerInventory::RemoveAllItems()
 {
-	for (auto Element : GameMode->GetGameInstance()->PlayerItems)
+	for (auto Element : GameInstance->PlayerItems)
 	{
 		Element->Remove(SpaceShip->PlayerStats);
 		OnItemRemoved.Broadcast(Element);
-		GameMode->GetGameInstance()->PlayerItems.Remove(Element);
+		GameInstance->PlayerItems.Remove(Element);
 	}
 }
 
 int UPlayerInventory::ItemCount(const UItemDataAsset* Item)
 {
 	int count = 0;
-	for (const UItemDataAsset* Element : GameMode->GetGameInstance()->PlayerItems)
+	for (const UItemDataAsset* Element : GameInstance->PlayerItems)
 	{
 		if (Element == Item) ++count;
 	}

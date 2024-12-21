@@ -28,8 +28,8 @@ public:
 	TArray<TSubclassOf<UItemDataAsset>> ItemsOnLevel;
 	UFUNCTION()
 	int GetCurrentUpgrade();
-	UFUNCTION(BlueprintCallable)
-	USpaceGameInstance* GetGameInstance();
+	//UFUNCTION(BlueprintCallable)
+	//USpaceGameInstance* GetGameInstance();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<ABossBase> LevelBoss;
 
