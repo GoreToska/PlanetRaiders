@@ -16,6 +16,7 @@ ATaskBase::ATaskBase()
 void ATaskBase::CompleteTask()
 {
 	OnCompleted.Broadcast(this);
+	TaskIndicator->Destroy();
 	Destroy();
 }
 

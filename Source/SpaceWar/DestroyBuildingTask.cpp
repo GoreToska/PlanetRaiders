@@ -34,7 +34,7 @@ void ADestroyBuildingTask::BeginPlay()
 
 void ADestroyBuildingTask::OnBuildingDestroyed(AEnemyHouse* Building)
 {
-	TArray<AActor*> OutActors;
+	TArray<AActor*> OutActors {};
 	Building->GetAttachedActors(OutActors);
 	for (auto OutActor : OutActors)
 	{
@@ -65,7 +65,7 @@ void ADestroyBuildingTask::Tick(float DeltaSeconds)
 		TaskIndicator->SetVisibility(false);
 		IsObjectsVisible = true;
 	}
-	else if (FVector::Distance(GetActorLocation(), UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation())
+	if (FVector::Distance(GetActorLocation(), UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation())
 		> Distance && IsObjectsVisible)
 	{
 		for (auto Element : BuildingsAndIndicators)

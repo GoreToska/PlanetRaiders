@@ -39,15 +39,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetCurrentUpgrade() const;
-
+	UFUNCTION(BlueprintCallable)
+	int GetItemCount(const UItemDataAsset* Item) const;
 	UPROPERTY()
 	FTimerHandle WorldTimer;
 	void OnTimerTick();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int TimeToUpgrade = 60;
 
-	UPROPERTY()
-	TArray<UItemDataAsset*> PlayerItems;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<UItemDataAsset*> PlayerItems {};
 
 protected:
 	int CurrentUpgrade = 1;

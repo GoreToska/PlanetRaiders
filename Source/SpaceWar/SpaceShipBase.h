@@ -60,7 +60,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnFollowedRocketCountChanged OnRocketFollowRemoved;
 	UPROPERTY()
-	TArray<AHomingProjectile*> ProjectilesAfterPlayer;
+	TArray<AHomingProjectile*> ProjectilesAfterPlayer {};
 	
 	void AddHomingRocket(AHomingProjectile* Projectile);
 	void RemoveHomingRocket(AHomingProjectile* Projectile);

@@ -76,7 +76,7 @@ void UPlayerInventory::RemoveAllItems()
 	}
 }
 
-int UPlayerInventory::ItemCount(const UItemDataAsset* Item)
+/*int UPlayerInventory::ItemCount(const UItemDataAsset* Item)
 {
 	int count = 0;
 	for (const UItemDataAsset* Element : GameInstance->PlayerItems)
@@ -86,4 +86,4 @@ int UPlayerInventory::ItemCount(const UItemDataAsset* Item)
 
 	UE_LOG(LogTemp, Display, TEXT("Found %i items"), count);
 	return count;
-}
+}*/

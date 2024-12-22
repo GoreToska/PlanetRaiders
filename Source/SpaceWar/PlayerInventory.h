@@ -46,8 +46,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, BlueprintAssignable)
 	FItemsChanged OnItemRemoved;
 	
-	UFUNCTION(BlueprintCallable)
-	int ItemCount(const UItemDataAsset* Item);
+	//UFUNCTION(BlueprintCallable)
+	//int ItemCount(const UItemDataAsset* Item);
 
 private:
 	UPROPERTY()

@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GunSceneComponent.h"
 #include "HealthComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "PlayerInventory.h"
 #include "PlayerStats.h"
 #include "ProjectileBase.h"
@@ -109,7 +110,7 @@ void APlayerShip::UseFlare(const FInputActionValue& Value)
 	GetWorld()->GetTimerManager().SetTimer(FlareTimerHandle, this, &APlayerShip::OnFlareTimerSet, 0.02, true);
 
 	UGameplayStatics::SpawnSoundAttached(FlareSound, GetRootComponent());
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FlareParticles, GetTransform());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), FlareEffect, GetActorLocation());
 	OnUsedFlare.Broadcast();
 }
 
@@ -163,11 +164,6 @@ void APlayerShip::OnCollide(UPrimitiveComponent* HitComponent, AActor* OtherActo
 	//TODO: check if other actor is boss or obstacle
 	if (Cast<AProjectileBase>(OtherActor))
 		return;
-
-	if (UHealthComponent* Component = OtherActor->GetComponentByClass<UHealthComponent>())
-	{
-		Component->GetDamage(CollideDamage);
-	}
 
 	HealthComponent->GetDamage(CollideDamage);
 }

@@ -46,7 +46,7 @@ void ASpaceGameMode::BeginPlay()
 	GameInstance = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	GameInstance->StartTimer();
 
-	TArray<AActor*> actors;
+	TArray<AActor*> actors {};
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATaskBase::StaticClass(), actors);
 	for (auto Actor : actors)
 	{

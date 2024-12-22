@@ -23,9 +23,9 @@ void UDodgeComponent::DodgeRockets()
 	DrawDebugSphere(GetWorld(),
 	                OwningActor->GetActorLocation(),
 	                DodgeDistance, 32, FColor::Red, false, 10);
-	TArray<AActor*> Actors;
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	TArray<AActor*> ActorsToIgnore;
+	TArray<AActor*> Actors {};
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes {};
+	TArray<AActor*> ActorsToIgnore {};
 	ActorsToIgnore.Add(GetOwner());
 	ActorsToIgnore.Add(OwningActor);
 	UKismetSystemLibrary::SphereOverlapActors(

@@ -42,6 +42,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UHealthComponent* HealthComponent;
 
+	float BaseHP;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

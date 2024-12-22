@@ -31,6 +31,17 @@ int USpaceGameInstance::GetCurrentUpgrade() const
 	return CurrentUpgrade;
 }
 
+int USpaceGameInstance::GetItemCount(const UItemDataAsset* Item) const
+{
+	int count = 0;
+	for (const UItemDataAsset* Element : PlayerItems)
+	{
+		if (Element == Item) ++count;
+	}
+
+	return count;
+}
+
 void USpaceGameInstance::OnTimerTick()
 {
 	++CurrentTime;
@@ -45,7 +56,8 @@ void USpaceGameInstance::OnTimerTick()
 
 void USpaceGameInstance::NewGame()
 {
-	PlayerItems.Empty();
+	if (PlayerItems.Num() != 0)
+		PlayerItems.Empty();
 	CurrentTime = 0;
 	CurrentUpgrade = 1;
 }

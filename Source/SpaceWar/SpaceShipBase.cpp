@@ -34,8 +34,6 @@ void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
 {
 	ProjectilesAfterPlayer.Add(Projectile);
 	OnRocketFollowAdded.Broadcast();
-	UE_LOG(LogTemp, Display, TEXT("Rocket added, %d"), ProjectilesAfterPlayer.Num());
-
 
 	if (!AlarmSpawnedSound->IsPlaying())
 		AlarmSpawnedSound->Play();
@@ -43,9 +41,12 @@ void ASpaceShipBase::AddHomingRocket(AHomingProjectile* Projectile)
 
 void ASpaceShipBase::RemoveHomingRocket(AHomingProjectile* Projectile)
 {
-	if(!HealthComponent->IsAlive())
+	if (!HealthComponent || !HealthComponent->IsAlive())
 		return;
-	
+
+	if (!ProjectilesAfterPlayer.Contains(Projectile))
+		return;
+
 	ProjectilesAfterPlayer.Remove(Projectile);
 	OnRocketFollowRemoved.Broadcast();
 

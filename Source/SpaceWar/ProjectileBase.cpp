@@ -72,9 +72,9 @@ void AProjectileBase::CreateSoundAndFX()
 
 void AProjectileBase::GetSplashDamage()
 {
-	TArray<AActor*> Actors;
-	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-	TArray<AActor*> ActorsToIgnore;
+	TArray<AActor*> Actors {};
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes {};
+	TArray<AActor*> ActorsToIgnore {};
 	ActorsToIgnore.Add(GetOwner());
 	ActorsToIgnore.Add(HitActor);
 	UKismetSystemLibrary::SphereOverlapActors(

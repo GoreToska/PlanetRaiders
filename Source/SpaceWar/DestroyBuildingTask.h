@@ -18,7 +18,7 @@ class SPACEWAR_API ADestroyBuildingTask : public ATaskBase
 
 public:
 	UPROPERTY(EditInstanceOnly)
-	TArray<AEnemyHouse*> EnemyBuildings;
+	TArray<AEnemyHouse*> EnemyBuildings {};
 	UPROPERTY()
 	TMap<AEnemyHouse*, AIndicator*> BuildingsAndIndicators;
 	virtual void BeginPlay() override;

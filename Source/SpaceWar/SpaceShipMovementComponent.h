@@ -57,4 +57,5 @@ protected:
 
 	UPROPERTY()
 	UAudioComponent* EngineAudio;
+	float PreviousRotateInput = 0;
 };

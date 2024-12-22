@@ -23,6 +23,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* ShotSound;
+	UPROPERTY(EditAnywhere)
+	float SpawnDistance = 200;
 
 protected:
 	// Called when the game starts or when spawned
@@ -59,7 +61,7 @@ protected:
 	void RotateTowardsPlayer();
 	UPROPERTY(EditAnywhere)
 	float PredictDistance = 10;
-
+	float BaseHP;
 	UPROPERTY(EditAnywhere)
 	float BurstShotsCount = 5;
 	UPROPERTY(EditAnywhere)

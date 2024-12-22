@@ -59,8 +59,8 @@ protected:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	TArray<ASpaceEngine*> Engines;
+	float BaseHP;
+	TArray<ASpaceEngine*> Engines {};
 	int EnginesCount;
 	UFUNCTION()
 	void OnEngineDead();

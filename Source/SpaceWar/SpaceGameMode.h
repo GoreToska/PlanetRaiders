@@ -25,7 +25,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UItemDataAsset* GetRandomItem();
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<UItemDataAsset>> ItemsOnLevel;
+	TArray<TSubclassOf<UItemDataAsset>> ItemsOnLevel {};
 	UFUNCTION()
 	int GetCurrentUpgrade();
 	//UFUNCTION(BlueprintCallable)
@@ -50,12 +50,12 @@ public:
 	FTaskCompleted OnTaskComplete;
 
 	UPROPERTY(BlueprintReadOnly)
-	TArray<ATaskBase*> Tasks;
+	TArray<ATaskBase*> Tasks {};
 
 	UPROPERTY()
-	TArray<ACarrierSpawnPoint*> CarrierSpawnPoints;
+	TArray<ACarrierSpawnPoint*> CarrierSpawnPoints {};
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<ACargoCarrier>> Carriers;
+	TArray<TSubclassOf<ACargoCarrier>> Carriers {};
 
 	UPROPERTY(BlueprintReadOnly)
 	USpaceGameInstance* GameInstance;

@@ -41,10 +41,18 @@ void USpaceShipMovementComponent::PerformMovementForward(float DeltaTime)
 void USpaceShipMovementComponent::PerformRotation(float DeltaTime)
 {
 	FRotator TurnRotation = FRotator(0, 0, CurrentRotateRotation.Pitch + CurrentRotateInput);
+
+	if (PreviousRotateInput != CurrentRotateInput && CurrentRotateInput != 0)
+	{
+		CurrentRotateRotation = FRotator(0, 0, 0);
+	}
+
 	CurrentRotateRotation = FMath::RInterpTo(CurrentRotateRotation, TurnRotation,
 	                                         DeltaTime, RotationPower);
 
 	OwningActor->AddActorLocalRotation(CurrentRotateRotation * DeltaTime);
+
+	PreviousRotateInput = CurrentRotateInput;
 }
 
 void USpaceShipMovementComponent::ClampSpeed()

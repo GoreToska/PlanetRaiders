@@ -71,12 +71,13 @@ void ABossBase::TeleportToPlayer()
 void ABossBase::Upgrade(int Value)
 {
 	CurrentUpgrade = Value;
-	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
+	HealthComponent->SetNewMaxHealth(BaseHP * (1 + IncreaseExponent));
 }
 
 // Called when the game starts or when spawned
 void ABossBase::BeginPlay()
 {
+	BaseHP = HealthComponent->MaxHP;
 	Super::BeginPlay();
 
 	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->GetCurrentUpgrade();
@@ -84,7 +85,7 @@ void ABossBase::BeginPlay()
 	Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->OnUpgraded.AddDynamic(
 		this, &ABossBase::Upgrade);
 
-	TArray<AActor*> ChildActors;
+	TArray<AActor*> ChildActors {};
 	GetAllChildActors(ChildActors);
 
 	for (auto ChildActor : ChildActors)

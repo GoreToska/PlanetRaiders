@@ -8,6 +8,7 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerShip.generated.h"
 
+class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
 class UPlayerInventory;
@@ -53,7 +54,8 @@ protected:
 	USoundBase* AimSound;
 	UPROPERTY(EditAnywhere)
 	USoundBase* FlareSound;
-
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* FlareEffect;
 	UPROPERTY(EditAnywhere)
 	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere)

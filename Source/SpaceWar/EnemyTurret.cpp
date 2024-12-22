@@ -46,6 +46,7 @@ void AEnemyTurret::BeginPlay()
 	Super::BeginPlay();
 
 	HealthComponent = GetComponentByClass<UHealthComponent>();
+	BaseHP = HealthComponent->MaxHP;
 	PlayerShip = Cast<APlayerShip>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	CurrentUpgrade = Cast<USpaceGameInstance>(UGameplayStatics::GetGameInstance(this))->GetCurrentUpgrade();
@@ -67,12 +68,12 @@ void AEnemyTurret::RotateTowardsPlayer()
 void AEnemyTurret::Upgrade(int Upgrade)
 {
 	CurrentUpgrade = Upgrade;
-	HealthComponent->SetNewMaxHealth(HealthComponent->MaxHP * (1 + IncreaseExponent));
+	HealthComponent->SetNewMaxHealth(BaseHP * (1 + IncreaseExponent));
 }
 
 bool AEnemyTurret::IsClearSite()
 {
-	FVector Start = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 100;
+	FVector Start = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * SpawnDistance;
 	FVector End = Start + TurretHead->GetForwardVector() * AttackDistance;
 	TArray<AActor*> ActorToIgnore = {this, PlayerShip};
 
@@ -129,7 +130,7 @@ void AEnemyTurret::FireShot()
 	                                       false);
 
 
-	FVector Location = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * 100;
+	FVector Location = TurretHead->GetComponentLocation() + TurretHead->GetForwardVector() * SpawnDistance;
 	FRotator Rotation = TurretHead->GetComponentRotation();
 
 	SetupProjectile(Location, Rotation);
@@ -183,7 +184,8 @@ void AEnemyTurret::RotateTowardsPredictedPosition()
 void AEnemyTurret::SetupProjectile(FVector Location, FRotator Rotation)
 {
 	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnInfo.SpawnCollisionHandlingOverride =
+		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 	Rotation.Pitch += FMath::RandRange(-Spread.X, Spread.X);
 	Rotation.Yaw += FMath::RandRange(-Spread.Y, Spread.Y);
